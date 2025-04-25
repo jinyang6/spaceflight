@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rocket Details - Reusable Rockets</title> <!-- Title will be updated dynamically -->
+  <meta name="description" content="Explore this reusable rocket and how its reusability dramatically reduces launch costs."> <!-- Description will be updated dynamically -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/charts.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
+      <nav class="nav" id="main-nav">
+        <!-- Nav links will be added dynamically -->
+        <a href="index.html" class="nav-link">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Rocket details will be loaded here -->
+    <div class="container"><p>Loading rocket details...</p></div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Reusable Rockets | Data sourced from publicly available information</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const providerId = urlParams.get('provider');
+      const rocketId = urlParams.get('rocket');
+
+      if (!providerId || !rocketId || !allData[providerId]) {
+        document.getElementById('main-content').innerHTML = '<div class="container"><p>Error: Invalid provider or rocket specified.</p></div>';
+        return;
+      }
+
+      const providerData = allData[providerId];
+      const rocket = providerData.vehicles.find(v => v.id === rocketId);
+
+      if (!rocket) {
+        document.getElementById('main-content').innerHTML = '<div class="container"><p>Error: Rocket not found for this provider.</p></div>';
+        return;
+      }
+
+      // Update page title and meta description
+      document.title = `${rocket.name} - ${providerData.manufacturer} Reusable Rocket`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', `Explore the ${rocket.name} from ${providerData.manufacturer} and how its reusability dramatically reduces launch costs.`);
+      }
+
+      // Update header navigation dynamically
+      const nav = document.getElementById('main-nav');
+      Object.keys(allData).forEach(id => {
+        const link = document.createElement('a');
+        link.href = `provider.html?provider=${id}`;
+        link.textContent = allData[id].manufacturer;
+        link.classList.add('nav-link');
+        nav.appendChild(link);
+      });
+       // Add link back to the current provider page
+       const providerLink = document.createElement('a');
+       providerLink.href = `provider.html?provider=${providerId}`;
+       providerLink.textContent = `${providerData.manufacturer} Fleet`;
+       providerLink.classList.add('nav-link', 'active'); // Style as active
+       nav.appendChild(providerLink);
+
+
+      // Populate main content
+      const mainContent = document.getElementById('main-content');
+      const imagePath = `data/${providerId}/imgs/${rocket.image}`;
+
+      // Helper to create stat cards safely
+      const createStatCard = (value, label) => {
+          const valStr = value !== null && value !== undefined ? String(value) : 'N/A';
+          // Add specific formatting for known values
+          let displayValue = valStr;
+          if (label === 'Height' && valStr !== 'N/A') displayValue = `${valStr}m`;
+          if (label === 'Diameter' && valStr !== 'N/A') displayValue = `${valStr}m`;
+          if (label === 'Mass' && valStr !== 'N/A') displayValue = `${formatCompactNumber(value)}kg`;
+          if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${formatCompactNumber(value)}kg` : 'Suborbital';
+          if (label === 'Cost per kg to LEO' && valStr !== 'N/A') displayValue = value > 0 ? formatCurrency(value) : 'N/A';
+          if (label === 'First Flight' && valStr !== 'N/A') displayValue = new Date(value).getFullYear();
+
+
+          return `
+              <div class="stat-card">
+                  <div class="stat-value">${displayValue}</div>
+                  <div class="stat-label">${label}</div>
+              </div>
+          `;
+      };
+
+      mainContent.innerHTML = `
+        <section class="hero">
+          <div class="container">
+            <h1 class="hero-title">${rocket.name}</h1>
+            <p class="hero-subtitle">${providerData.manufacturer}'s ${rocket.operationalStatus} ${rocket.reusableStages === 2 ? 'fully' : (rocket.reusableStages === 1 ? 'partially' : '')} reusable launch vehicle</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+              <img src="${imagePath}" alt="${rocket.name} rocket" style="max-width: 300px; height: auto; flex-shrink: 0;" onerror="this.style.display='none'">
+              <div style="flex-grow: 1;">
+                <h2>Technical Specifications</h2>
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-top: 1rem;">
+                  ${createStatCard(rocket.height_m, 'Height')}
+                  ${createStatCard(rocket.diameter_m, 'Diameter')}
+                  ${createStatCard(rocket.mass_kg, 'Mass')}
+                  ${createStatCard(rocket.payloadToLEO_kg, 'Payload to LEO')}
+                  ${createStatCard(rocket.firstFlight, 'First Flight')}
+                  ${createStatCard(rocket.reusableStages, 'Reusable Stages')}
+                  ${createStatCard(rocket.costPerKgToLEO_usd, 'Cost per kg to LEO')}
+                  ${createStatCard(rocket.operationalStatus, 'Status')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <h2>Cost Efficiency Through Reusability</h2>
+            <p>The ${rocket.name} demonstrates significant cost savings through its reusable design. The chart below illustrates the estimated cost per launch decreasing over multiple flights.</p>
+
+            <div class="chart-container">
+              <canvas id="costPerLaunchChart" data-rocket-id="${rocket.id}" data-provider="${providerId}"></canvas>
+            </div>
+
+            <div class="stat-grid" style="margin-top: 2rem;">
+              ${rocket.costScaling.map(item => createStatCard(item.cost_usd ? formatCurrency(item.cost_usd) : 'N/A', `Launch ${item.launchNumber} Cost`)).join('')}
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h3>The Economics of ${rocket.name} Reusability</h3>
+              <p>With each reuse, ${providerData.manufacturer} achieves significant cost savings:</p>
+              <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                <li>First launch cost: ${formatCurrency(rocket.costScaling[0].cost_usd)}</li>
+                <li>Estimated 20th launch cost: ${formatCurrency(rocket.costScaling[rocket.costScaling.length - 1].cost_usd)}</li>
+                <li>Approximate cost reduction by 20th launch: ${Math.round((1 - rocket.costScaling[rocket.costScaling.length - 1].cost_usd / rocket.costScaling[0].cost_usd) * 100)}%</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <h2>Reusability Features</h2>
+            <p>The ${rocket.name} incorporates several key features that enable its reusability:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 1rem;" id="reusability-features">
+              <li>${rocket.reusableStages === 1 ? 'Reusable first stage' : (rocket.reusableStages === 2 ? 'Fully reusable first and second stages' : 'Reusability details not specified')}</li>
+              <!-- Add more specific features if available in data -->
+            </ul>
+          </div>
+        </section>
+      `;
+
+      // Initialize charts after content is loaded
+      initCharts();
+
+    });
+  </script>
+</body>
+</html>

@@ -1,12 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spaceflight</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reusable Rockets - Revolutionizing Space Access</title>
+  <meta name="description" content="Explore how reusable rockets are dramatically reducing the cost of space access through innovative technology and engineering.">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
 </head>
 <body>
-    <h1>Hello World</h1>
+  <header>
+    <div class="container header-inner">
+      <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
+      <nav class="nav" id="main-nav">
+        <!-- Nav links will be added dynamically -->
+        <a href="index.html" class="nav-link active">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">Reusable Rockets</h1>
+        <p class="hero-subtitle">Revolutionizing access to space through cost-efficient, reusable launch vehicles that are transforming the economics of spaceflight.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>The Economics of Reusability</h2>
+        <p>Traditional rockets are discarded after a single use, making space access prohibitively expensive. Reusable rockets introduce a paradigm shift by allowing multiple launches with the same vehicle, dramatically reducing costs with each reuse.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-value">Up to 90%+</div>
+            <div class="stat-label">Cost reduction potential through reusability</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">$100M+</div>
+            <div class="stat-label">Typical single-use launch cost</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">Under $10M</div>
+            <div class="stat-label">Potential cost after multiple reuses</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Innovative Launch Providers</h2>
+        <p>Several companies are leading the charge in reusable rocket technology, each with their own approach to reducing launch costs while maximizing payload capacity.</p>
+
+        <div class="provider-grid" id="provider-grid">
+          <!-- Provider cards will be added dynamically -->
+          <div class="provider-card placeholder">Loading providers...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>The Impact of Reusability</h2>
+        <p>With each successive launch, reusable rockets dramatically reduce the cost of accessing space, opening up new possibilities for satellite deployment, space exploration, and even human settlement beyond Earth.</p>
+        <p>Explore each provider's fleet to see how their innovative approaches to reusability are reshaping the economics of spaceflight.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Reusable Rockets | Data sourced from publicly available information</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Update header navigation dynamically
+      const nav = document.getElementById('main-nav');
+      providersData.forEach(provider => {
+        const link = document.createElement('a');
+        link.href = `provider.html?provider=${provider.id}`;
+        link.textContent = provider.manufacturer;
+        link.classList.add('nav-link');
+        nav.appendChild(link);
+      });
+
+      // Dynamically load provider cards
+      const providerGrid = document.getElementById('provider-grid');
+      providerGrid.innerHTML = ''; // Clear placeholder
+
+      if (providersData && providersData.length > 0) {
+        providersData.forEach(provider => {
+          const card = document.createElement('div');
+          card.classList.add('provider-card');
+
+          // Basic description - could be enhanced if more data is added
+          const description = `${provider.country}-based aerospace company developing reusable rocket technology. Fleet includes ${provider.vehicleCount} vehicle(s).`;
+          const imagePath = provider.image ? provider.image : 'assets/placeholder.png'; // Use placeholder if no image
+
+          card.innerHTML = `
+            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" onerror="this.src='assets/placeholder.png'; this.alt='Placeholder image'">
+            <div class="provider-content">
+              <h3 class="provider-title">${provider.manufacturer}</h3>
+              <p class="provider-description">${description}</p>
+              <a href="provider.html?provider=${provider.id}" class="provider-link">Explore ${provider.manufacturer} Fleet →</a>
+            </div>
+          `;
+          providerGrid.appendChild(card);
+        });
+      } else {
+        providerGrid.innerHTML = '<p>No provider data available.</p>';
+      }
+    });
+  </script>
 </body>
 </html>

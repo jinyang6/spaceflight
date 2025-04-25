@@ -1,4 +1,4 @@
-  {
+export const data = {
   "manufacturer": "SpaceX",
   "country": "United States",
   "vehicles": [
@@ -8,9 +8,9 @@
       "firstFlight": "2010-06-04",
       "height_m": 69.8,
       "diameter_m": 3.7,
-      "mass_kg": 549000,
+      "mass_t": 549,
       "costPerLaunch_usd": 69750000,
-      "payloadToLEO_kg": 22800,
+      "payloadToLEO_t": 22.8,
       "costPerKgToLEO_usd": 3059.21,
       "reusableStages": 1,
       "operationalStatus": "active",
@@ -44,10 +44,10 @@
       "firstFlight": "2018-02-06",
       "height_m": 70,
       "diameter_m": 3.66,
-      "mass_kg": 1420788,
+      "mass_t": 1420.788,
       "costPerLaunch_usd": 97000000,
-      "payloadToLEO_kg": 63800,
-      "costPerKgToLEO_usd": 1518.18,
+      "payloadToLEO_t": 63.8,
+      "costPerKgToLEO_usd": 1520.38,
       "reusableStages": 2,
       "operationalStatus": "active",
       "image": "falconheavy.png",
@@ -80,10 +80,10 @@
       "firstFlight": "2023-04-20",
       "height_m": 124.4,
       "diameter_m": 9,
-      "mass_kg": 5000000,
+      "mass_t": 5000,
       "costPerLaunch_usd": 10000000,
-      "payloadToLEO_kg": 100000,
-      "costPerKgToLEO_usd": 100,
+      "payloadToLEO_t": 100.0,
+      "costPerKgToLEO_usd": 100.0,
       "reusableStages": 2,
       "operationalStatus": "testing",
       "image": "starship.png",
@@ -111,4 +111,4 @@
       ]
     }
   ]
-}
+};

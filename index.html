@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="css/main.css">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/data.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+  <!-- charts.js not needed on index page -->
 </head>
 <body>
   <header>
@@ -79,30 +80,37 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module"> // Add type="module"
+    import { providers } from './js/data.js'; // Import data
+    import { getAllProvidersSummary } from './js/main.js'; // Import necessary function
+
     document.addEventListener('DOMContentLoaded', () => {
       // Update header navigation dynamically
       const nav = document.getElementById('main-nav');
-      providersData.forEach(provider => {
+      // Use imported providers object keys for navigation
+      Object.keys(providers).forEach(id => {
         const link = document.createElement('a');
-        link.href = `provider.html?provider=${provider.id}`;
-        link.textContent = provider.manufacturer;
+        link.href = `provider.html?provider=${id}`;
+        link.textContent = providers[id].manufacturer; // Get manufacturer from imported data
         link.classList.add('nav-link');
         nav.appendChild(link);
       });
 
-      // Dynamically load provider cards
+      // Dynamically load provider cards using the summary function
       const providerGrid = document.getElementById('provider-grid');
       providerGrid.innerHTML = ''; // Clear placeholder
+      
+      const providersSummary = getAllProvidersSummary(); // Get summary data
 
-      if (providersData && providersData.length > 0) {
-        providersData.forEach(provider => {
+      if (providersSummary && providersSummary.length > 0) {
+        providersSummary.forEach(provider => {
           const card = document.createElement('div');
           card.classList.add('provider-card');
 
-          // Basic description - could be enhanced if more data is added
+          // Use data from the summary function
           const description = `${provider.country}-based aerospace company developing reusable rocket technology. Fleet includes ${provider.vehicleCount} vehicle(s).`;
-          const imagePath = provider.image ? provider.image : 'assets/placeholder.png'; // Use placeholder if no image
+          // Image path logic is now handled within getAllProvidersSummary
+          const imagePath = provider.image;
 
           card.innerHTML = `
             <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" onerror="this.src='assets/placeholder.png'; this.alt='Placeholder image'">

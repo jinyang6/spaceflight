@@ -256,9 +256,12 @@ header {
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 1.75rem; /* Slightly smaller font size */
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-xs);
+  overflow-wrap: break-word; /* Allow long words to break and wrap */
+  word-wrap: break-word; /* Legacy fallback */
+  hyphens: auto; /* Optional: Improve wrapping */
 }
 
 .stat-label {

@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="css/main.css">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/data.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+  <!-- charts.js not needed on provider page -->
 </head>
 <body>
   <header>
@@ -56,17 +57,22 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module"> // Add type="module"
+    import { providers } from './js/data.js'; // Import data
+    // Import helpers needed for this page
+    import { formatCurrency, formatCompactNumber } from './js/main.js';
+
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const providerId = urlParams.get('provider');
 
-      if (!providerId || !allData[providerId]) {
+      // Use imported providers object
+      if (!providerId || !providers[providerId]) {
         document.querySelector('main').innerHTML = '<div class="container"><p>Error: Provider not found.</p></div>';
         return;
       }
 
-      const providerData = allData[providerId];
+      const providerData = providers[providerId]; // Use imported data
 
       // Update page title and meta description
       document.title = `${providerData.manufacturer} - Reusable Rockets`;
@@ -77,13 +83,13 @@
 
       // Update header navigation dynamically
       const nav = document.getElementById('main-nav');
-      Object.keys(allData).forEach(id => {
+      Object.keys(providers).forEach(id => { // Use imported data
         const link = document.createElement('a');
         link.href = `provider.html?provider=${id}`;
-        link.textContent = allData[id].manufacturer;
+        link.textContent = providers[id].manufacturer; // Use imported data
         link.classList.add('nav-link');
         if (id === providerId) {
-          link.classList.add('active'); // Optional: style the active link
+          link.classList.add('active');
         }
         nav.appendChild(link);
       });

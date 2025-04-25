@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="css/main.css">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/charts.js"></script>
+  <script src="js/data.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+  <script src="js/charts.js" type="module"></script>
 </head>
 <body>
   <header>
@@ -34,18 +34,26 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module"> // Add type="module" here
+    import { providers } from './js/data.js'; // Import the new data structure
+    // Import necessary functions from app.js if chart/formatting logic is there
+    // Assuming initCharts and formatCurrency/formatCompactNumber might be in app.js
+    // Import helpers from their correct modules
+    import { formatCurrency, formatCompactNumber } from './js/main.js';
+    import { initCharts } from './js/charts.js';
+
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const providerId = urlParams.get('provider');
       const rocketId = urlParams.get('rocket');
 
-      if (!providerId || !rocketId || !allData[providerId]) {
+      // Use the imported 'providers' object
+      if (!providerId || !rocketId || !providers[providerId]) {
         document.getElementById('main-content').innerHTML = '<div class="container"><p>Error: Invalid provider or rocket specified.</p></div>';
         return;
       }
 
-      const providerData = allData[providerId];
+      const providerData = providers[providerId]; // Use imported data
       const rocket = providerData.vehicles.find(v => v.id === rocketId);
 
       if (!rocket) {
@@ -62,10 +70,10 @@
 
       // Update header navigation dynamically
       const nav = document.getElementById('main-nav');
-      Object.keys(allData).forEach(id => {
+      Object.keys(providers).forEach(id => { // Use imported data
         const link = document.createElement('a');
         link.href = `provider.html?provider=${id}`;
-        link.textContent = allData[id].manufacturer;
+        link.textContent = providers[id].manufacturer; // Use imported data
         link.classList.add('nav-link');
         nav.appendChild(link);
       });
@@ -88,8 +96,10 @@
           let displayValue = valStr;
           if (label === 'Height' && valStr !== 'N/A') displayValue = `${valStr}m`;
           if (label === 'Diameter' && valStr !== 'N/A') displayValue = `${valStr}m`;
-          if (label === 'Mass' && valStr !== 'N/A') displayValue = `${formatCompactNumber(value)}kg`;
-          if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${formatCompactNumber(value)}kg` : 'Suborbital';
+          // Display mass directly in tonnes (t) from the data
+          if (label === 'Mass' && valStr !== 'N/A') displayValue = `${value} t`;
+          // Display payload directly in tonnes (t) from the data
+          if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${value} t` : 'Suborbital';
           if (label === 'Cost per kg to LEO' && valStr !== 'N/A') displayValue = value > 0 ? formatCurrency(value) : 'N/A';
           if (label === 'First Flight' && valStr !== 'N/A') displayValue = new Date(value).getFullYear();
 
@@ -119,8 +129,8 @@
                 <div class="stat-grid" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-top: 1rem;">
                   ${createStatCard(rocket.height_m, 'Height')}
                   ${createStatCard(rocket.diameter_m, 'Diameter')}
-                  ${createStatCard(rocket.mass_kg, 'Mass')}
-                  ${createStatCard(rocket.payloadToLEO_kg, 'Payload to LEO')}
+                  ${createStatCard(rocket.mass_t, 'Mass')}
+                  ${createStatCard(rocket.payloadToLEO_t, 'Payload to LEO')}
                   ${createStatCard(rocket.firstFlight, 'First Flight')}
                   ${createStatCard(rocket.reusableStages, 'Reusable Stages')}
                   ${createStatCard(rocket.costPerKgToLEO_usd, 'Cost per kg to LEO')}

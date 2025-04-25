@@ -1,4 +1,4 @@
-{
+export const data = {
   "manufacturer": "LandSpace",
   "country": "China",
   "vehicles": [
@@ -8,10 +8,10 @@
       "firstFlight": null,
       "height_m": 76.6,
       "diameter_m": 4.5,
-      "mass_kg": 660000,
+      "mass_t": 660,
       "costPerLaunch_usd": 6390000,
-      "payloadToLEO_kg": 21300,
-      "costPerKgToLEO_usd": 300,
+      "payloadToLEO_t": 21.3,
+      "costPerKgToLEO_usd": 300.0,
       "reusableStages": 1,
       "operationalStatus": "planned",
       "image": "zhuque3.png",
@@ -39,4 +39,4 @@
       ]
     }
   ]
-}
+};

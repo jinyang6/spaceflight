@@ -2,6 +2,7 @@
 
 An Apple-style minimalist website showcasing the cost efficiency of reusable rockets from different space launch providers, built with dynamic content loading.
 
+**Live Site:** [https://jinyang6.github.io/spaceflight/](https://jinyang6.github.io/spaceflight/)
 ## Overview
 
 This project presents data on reusable rockets from SpaceX, LandSpace, and Blue Origin, focusing on how reusability dramatically reduces launch costs over time. The website uses dynamic content generation to display provider and rocket information from a central data source (`js/data.js`).

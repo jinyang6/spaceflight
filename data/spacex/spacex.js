@@ -15,6 +15,8 @@ export const data = {
       "reusableStages": 1,
       "operationalStatus": "active",
       "image": "falcon9.png",
+      "modelFile": "falcon9.glb",
+      "modelCredit": "\"Falcon 9 - SpaceX\" (https://skfb.ly/6RIC9) by Stanley Creative is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).", // Updated credit
       "costScaling": [
         {
           "launchNumber": 1,
@@ -51,6 +53,8 @@ export const data = {
       "reusableStages": 2,
       "operationalStatus": "active",
       "image": "falconheavy.png",
+      "modelFile": "falconheavy.glb",
+      "modelCredit": "\"SpaceX Falcon Heavy\" (https://skfb.ly/o6zpZ) by AllThingsSpace is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).", // Updated credit
       "costScaling": [
         {
           "launchNumber": 1,
@@ -87,6 +91,8 @@ export const data = {
       "reusableStages": 2,
       "operationalStatus": "testing",
       "image": "starship.png",
+      "modelFile": "starship.glb",
+      "modelCredit": "\"SpaceX Starship Ship S25 & Booster 9\" (https://skfb.ly/oL9CU) by Clarence365 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).", // Updated credit
       "costScaling": [
         {
           "launchNumber": 1,

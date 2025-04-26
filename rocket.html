@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="css/main.css">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Model Viewer Component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <!-- Site JS Modules -->
   <script src="js/data.js" type="module"></script>
   <script src="js/main.js" type="module"></script>
   <script src="js/charts.js" type="module"></script>
@@ -34,11 +37,8 @@
     </div>
   </footer>
 
-  <script type="module"> // Add type="module" here
-    import { providers } from './js/data.js'; // Import the new data structure
-    // Import necessary functions from app.js if chart/formatting logic is there
-    // Assuming initCharts and formatCurrency/formatCompactNumber might be in app.js
-    // Import helpers from their correct modules
+  <script type="module">
+    import { providers } from './js/data.js';
     import { formatCurrency, formatCompactNumber } from './js/main.js';
     import { initCharts } from './js/charts.js';
 
@@ -46,59 +46,49 @@
       const urlParams = new URLSearchParams(window.location.search);
       const providerId = urlParams.get('provider');
       const rocketId = urlParams.get('rocket');
+      const mainContent = document.getElementById('main-content');
+      const nav = document.getElementById('main-nav');
 
-      // Use the imported 'providers' object
+      // --- Data Validation ---
       if (!providerId || !rocketId || !providers[providerId]) {
-        document.getElementById('main-content').innerHTML = '<div class="container"><p>Error: Invalid provider or rocket specified.</p></div>';
+        mainContent.innerHTML = '<div class="container"><p>Error: Invalid provider or rocket specified.</p></div>';
         return;
       }
-
-      const providerData = providers[providerId]; // Use imported data
+      const providerData = providers[providerId];
       const rocket = providerData.vehicles.find(v => v.id === rocketId);
-
       if (!rocket) {
-        document.getElementById('main-content').innerHTML = '<div class="container"><p>Error: Rocket not found for this provider.</p></div>';
+        mainContent.innerHTML = '<div class="container"><p>Error: Rocket not found for this provider.</p></div>';
         return;
       }
 
-      // Update page title and meta description
+      // --- Update Page Metadata ---
       document.title = `${rocket.name} - ${providerData.manufacturer} Reusable Rocket`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute('content', `Explore the ${rocket.name} from ${providerData.manufacturer} and how its reusability dramatically reduces launch costs.`);
       }
 
-      // Update header navigation dynamically
-      const nav = document.getElementById('main-nav');
-      Object.keys(providers).forEach(id => { // Use imported data
+      // --- Update Header Navigation ---
+      Object.keys(providers).forEach(id => {
         const link = document.createElement('a');
         link.href = `provider.html?provider=${id}`;
-        link.textContent = providers[id].manufacturer; // Use imported data
+        link.textContent = providers[id].manufacturer;
         link.classList.add('nav-link');
+        // Optionally highlight the current provider group if desired
+        // if (id === providerId) link.classList.add('active');
         nav.appendChild(link);
       });
-       // The "Back to Provider" link has been removed as requested.
 
-
-      // Populate main content
-      const mainContent = document.getElementById('main-content');
-      const imagePath = `data/${providerId}/imgs/${rocket.image}`;
-
-      // Helper to create stat cards safely
+      // --- Helper Functions ---
       const createStatCard = (value, label) => {
           const valStr = value !== null && value !== undefined ? String(value) : 'N/A';
-          // Add specific formatting for known values
           let displayValue = valStr;
           if (label === 'Height' && valStr !== 'N/A') displayValue = `${valStr}m`;
           if (label === 'Diameter' && valStr !== 'N/A') displayValue = `${valStr}m`;
-          // Display mass directly in tonnes (t) from the data
-          if (label === 'Mass' && valStr !== 'N/A') displayValue = `${value} t`;
-          // Display payload directly in tonnes (t) from the data
-          if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${value} t` : 'Suborbital';
+          if (label === 'Mass' && valStr !== 'N/A') displayValue = `${value} t`; // Use mass_t
+          if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${value} t` : 'Suborbital'; // Use payloadToLEO_t
           if (label === 'Cost per kg to LEO' && valStr !== 'N/A') displayValue = value > 0 ? formatCurrency(value) : 'N/A';
           if (label === 'First Flight' && valStr !== 'N/A') displayValue = new Date(value).getFullYear();
-
-
           return `
               <div class="stat-card">
                   <div class="stat-value">${displayValue}</div>
@@ -107,6 +97,8 @@
           `;
       };
 
+      // --- Generate Main Content HTML ---
+      const imagePath = `data/${providerId}/imgs/${rocket.image}`;
       mainContent.innerHTML = `
         <section class="hero">
           <div class="container">
@@ -136,19 +128,50 @@
           </div>
         </section>
 
+        <!-- Placeholder Section for 3D Model -->
+        <section class="section model-section-placeholder">
+          <div class="container">
+            <div class="model-loader" id="model-loader">
+              <!-- Content generated by JS below -->
+            </div>
+            <div class="model-instructions-overlay" id="model-instructions-overlay" style="display: none;">
+              <div class="modal-content">
+                <h3>How to Interact</h3>
+                <div class="instructions-grid">
+                  <div class="instruction-item">
+                    <img src="assets/icons/rotate.svg" alt="Rotate Icon">
+                    <span>Rotate: Click & Drag</span>
+                  </div>
+                  <div class="instruction-item">
+                    <img src="assets/icons/zoom.svg" alt="Zoom Icon">
+                    <span>Zoom: Scroll / Pinch</span>
+                  </div>
+                  <div class="instruction-item">
+                    <img src="assets/icons/pan.svg" alt="Pan Icon">
+                    <img src="assets/icons/right-click.svg" alt="Right Click Icon" class="inline-icon">
+                    <span>Pan: Right-Click / 2-Finger Drag</span>
+                  </div>
+                </div>
+                <button id="instructions-ok-btn" class="cta-button">Okay, Got It!</button>
+              </div>
+            </div>
+            <div class="model-viewer-container" id="model-viewer-container" style="display: none;">
+              <!-- Model viewer inserted here by JS -->
+            </div>
+          </div>
+        </section>
+        <!-- End Placeholder Section -->
+
         <section class="section">
           <div class="container">
             <h2>Cost Efficiency Through Reusability</h2>
             <p>The ${rocket.name} demonstrates significant cost savings through its reusable design. The chart below illustrates the estimated cost per launch decreasing over multiple flights.</p>
-
             <div class="chart-container">
               <canvas id="costPerLaunchChart" data-rocket-id="${rocket.id}" data-provider="${providerId}"></canvas>
             </div>
-
             <div class="stat-grid" style="margin-top: 2rem;">
               ${rocket.costScaling.map(item => createStatCard(item.cost_usd ? formatCurrency(item.cost_usd) : 'N/A', `Launch ${item.launchNumber} Cost`)).join('')}
             </div>
-
             <div style="margin-top: 2rem;">
               <h3>The Economics of ${rocket.name} Reusability</h3>
               <p>With each reuse, ${providerData.manufacturer} achieves significant cost savings:</p>
@@ -173,8 +196,65 @@
         </section>
       `;
 
-      // Initialize charts after content is loaded
+      // --- Initialize Charts ---
+      // Ensure charts are initialized *after* the canvas element is in the DOM
       initCharts();
+
+      // --- Logic for Guided Model Loading ---
+      const modelLoader = document.getElementById('model-loader');
+      const instructionsOverlay = document.getElementById('model-instructions-overlay');
+      const viewerContainer = document.getElementById('model-viewer-container');
+      const instructionsOkBtn = document.getElementById('instructions-ok-btn');
+
+      if (rocket.modelFile) {
+        // Model exists: Setup the visual "Load" placeholder
+        const modelPath = `data/${providerId}/models/${rocket.modelFile}`;
+        const modelAlt = `${rocket.name} 3D Model`;
+        const creditText = rocket.modelCredit ? `<p class="model-credit">Model Credit: ${rocket.modelCredit}</p>` : '';
+
+        modelLoader.innerHTML = `
+          <div class="model-loader-visual">
+            <img src="assets/icons/cube.svg" alt="3D Cube Icon" class="model-loader-icon">
+            <h4 class="model-loader-title">Interactive 3D Model</h4>
+            <button id="load-model-btn" class="cta-button" data-model-src="${modelPath}" data-model-alt="${modelAlt}">
+              Load ${rocket.name} 3D Model
+            </button>
+          </div>
+        `;
+
+        const loadModelBtn = document.getElementById('load-model-btn');
+
+        loadModelBtn.addEventListener('click', () => {
+          modelLoader.style.display = 'none';
+          instructionsOverlay.style.display = 'flex'; // Show instructions modal
+        });
+
+        instructionsOkBtn.addEventListener('click', () => {
+          instructionsOverlay.style.display = 'none'; // Hide instructions
+
+          // Create and display the model viewer
+          viewerContainer.innerHTML = `
+            <model-viewer
+              src="${modelPath}"
+              alt="${modelAlt}"
+              camera-controls
+              auto-rotate
+              loading="lazy"
+              decoding="async"
+              shadow-intensity="1"
+              environment-image="neutral"
+              style="width: 100%; height: 500px; background-color: #f8f8f8; border-radius: 8px;"
+            ></model-viewer>
+            ${creditText}
+          `;
+          viewerContainer.style.display = 'block'; // Show viewer container
+        });
+
+      } else {
+        // Model does not exist: Show "Not Available" message
+        modelLoader.innerHTML = `<p class="model-not-available">3D Model Not Available for ${rocket.name}</p>`;
+      }
+      // --- End Logic for Guided Model Loading ---
 
     });
   </script>

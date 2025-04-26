@@ -15,6 +15,8 @@ export const data = {
       "reusableStages": 1,
       "operationalStatus": "planned",
       "image": "zhuque3.png",
+      "modelFile": null, // No model available yet
+      "modelCredit": null, // No credit needed
       "costScaling": [
         {
           "launchNumber": 1,

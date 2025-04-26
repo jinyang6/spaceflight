@@ -350,3 +350,227 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+/* --- 3D Model Viewer Styles --- */
+.model-section h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.model-viewer-container {
+  margin-bottom: var(--spacing-md);
+}
+
+/* model-viewer itself is styled inline for height/width/background */
+
+.model-credit {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+/* Responsive adjustments for model viewer height */
+@media (max-width: 768px) {
+  .model-viewer-container model-viewer {
+    height: 400px !important; /* Reduce height on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .model-viewer-container model-viewer {
+    height: 300px !important; /* Further reduce height on very small screens */
+  }
+}
+/* --- End 3D Model Viewer Styles --- */
+.model-interaction-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: var(--spacing-sm); /* Smaller margin than credit */
+}
+/* --- Guided Model Loader Styles --- */
+.model-section-placeholder .container {
+  /* Keep container centered */
+  text-align: center;
+}
+
+/* --- Guided Model Loader Styles --- */
+.model-section-placeholder .container {
+  text-align: center;
+}
+
+.model-loader-visual {
+  /* Refined placeholder block style */
+  /* border: 1px dashed var(--color-border); */ /* Removed border */
+  border-radius: 12px; /* Slightly larger radius */
+  padding: var(--spacing-xl);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  background-color: #f9f9f9; /* Lighter background */
+  max-width: 400px;
+  margin: var(--spacing-lg) auto;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  transition: box-shadow 0.3s ease;
+}
+.model-loader-visual:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Enhance shadow on hover */
+}
+
+.model-loader-icon {
+  width: 64px; /* Slightly smaller icon */
+  height: 64px;
+  /* Assuming SVG: color it with accent color */
+  /* Use mask for PNGs or ensure SVG fill is controllable */
+  /* filter: invert(38%) sepia(98%) saturate(2748%) hue-rotate(198deg) brightness(104%) contrast(104%); */ /* Example filter for accent blue */
+  /* fill: var(--color-accent); */ /* Simpler if SVG */
+  color: var(--color-accent); /* Try setting color, might work for some SVGs */
+  opacity: 0.8;
+}
+
+.model-loader-title {
+  font-size: 1.1rem; /* Slightly smaller */
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary); /* Darker text */
+  margin-bottom: var(--spacing-sm);
+}
+
+.model-loader-visual .cta-button {
+  /* Ensure button uses standard CTA style */
+  margin-top: var(--spacing-sm);
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 6px;
+  font-weight: var(--font-weight-medium);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.model-loader-visual .cta-button:hover {
+    background-color: #0056b3; /* Darker accent on hover */
+}
+
+
+.model-not-available {
+  /* Refined "Not Available" text style */
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xl);
+  font-style: italic;
+  border: 1px solid var(--color-border); /* Solid border */
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  display: inline-block;
+  max-width: 400px;
+  margin: var(--spacing-lg) auto;
+}
+
+.model-instructions-overlay {
+  /* Keep overlay styles */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.model-instructions-overlay[style*="display: flex"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  /* Refined modal box style */
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  padding: var(--spacing-xl);
+  border-radius: 12px; /* Match loader radius */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  width: 600px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
+}
+
+.instructions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  width: 100%;
+}
+
+.instruction-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.instruction-item img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--spacing-sm);
+  filter: none; /* Ensure icons are visible on white */
+}
+.instruction-item img.inline-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 var(--spacing-xs);
+    filter: none;
+}
+
+.instruction-item span {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+#instructions-ok-btn {
+  /* Refined "Okay, Got It!" button style */
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  border-radius: 6px; /* Match loader button */
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+#instructions-ok-btn:hover {
+    background-color: #0056b3; /* Darker accent on hover */
+}
+
+/* Responsive for instructions modal */
+@media (max-width: 600px) {
+  .instructions-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  .modal-content h3 {
+      font-size: 1.5rem;
+  }
+}
+
+/* Ensure viewer container takes space */
+.model-viewer-container {
+    min-height: 300px;
+}
+
+/* --- End Guided Model Loader Styles --- */

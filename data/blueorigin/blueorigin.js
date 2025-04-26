@@ -15,6 +15,8 @@ export const data = {
       "reusableStages": 1,
       "operationalStatus": "active",
       "image": "new_shepard.png",
+      "modelFile": null, // No model available yet
+      "modelCredit": null, // No credit needed
       "costScaling": [
         {"launchNumber": 1, "cost_usd": 8500000},
         {"launchNumber": 5, "cost_usd": 4250000},
@@ -34,6 +36,8 @@ export const data = {
       "reusableStages": 1,
       "operationalStatus": "development",
       "image": "new_glenn.png",
+      "modelFile": null, // No model available yet
+      "modelCredit": null, // No credit needed
       "costScaling": [
         {"launchNumber": 1, "cost_usd": 55000000},
         {"launchNumber": 5, "cost_usd": 27500000},

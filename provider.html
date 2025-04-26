@@ -117,7 +117,7 @@
           const twentiethLaunchCost = rocket.costScaling.find(c => c.launchNumber === 20)?.cost_usd;
 
           card.innerHTML = `
-            <img src="${imagePath}" alt="${rocket.name} rocket" class="rocket-image" onerror="this.style.display='none'">
+            <img src="${imagePath}" alt="${rocket.name} rocket" class="rocket-image" loading="lazy" decoding="async" onerror="this.style.display='none'">
             <div class="rocket-content">
               <h3 class="rocket-title">${rocket.name}</h3>
               <p class="rocket-description">${rocket.payloadToLEO_kg !== null && rocket.payloadToLEO_kg > 0 ? `Delivers ${formatCompactNumber(rocket.payloadToLEO_kg)}kg to LEO.` : 'Suborbital vehicle.'}</p>

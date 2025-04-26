@@ -113,7 +113,7 @@
           const imagePath = provider.image;
 
           card.innerHTML = `
-            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" onerror="this.src='assets/placeholder.png'; this.alt='Placeholder image'">
+            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" loading="lazy" decoding="async" onerror="this.src='assets/placeholder.png'; this.alt='Placeholder image'">
             <div class="provider-content">
               <h3 class="provider-title">${provider.manufacturer}</h3>
               <p class="provider-description">${description}</p>

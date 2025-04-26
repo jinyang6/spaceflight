@@ -118,7 +118,7 @@
         <section class="section">
           <div class="container">
             <div style="display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
-              <img src="${imagePath}" alt="${rocket.name} rocket" style="max-width: 300px; height: auto; flex-shrink: 0;" onerror="this.style.display='none'">
+              <img src="${imagePath}" alt="${rocket.name} rocket" loading="lazy" decoding="async" style="max-width: 300px; height: auto; flex-shrink: 0;" onerror="this.style.display='none'">
               <div style="flex-grow: 1;">
                 <h2>Technical Specifications</h2>
                 <div class="stat-grid" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); margin-top: 1rem;">

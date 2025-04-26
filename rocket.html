@@ -77,12 +77,7 @@
         link.classList.add('nav-link');
         nav.appendChild(link);
       });
-       // Add link back to the current provider page
-       const providerLink = document.createElement('a');
-       providerLink.href = `provider.html?provider=${providerId}`;
-       providerLink.textContent = `${providerData.manufacturer} Fleet`;
-       providerLink.classList.add('nav-link', 'active'); // Style as active
-       nav.appendChild(providerLink);
+       // The "Back to Provider" link has been removed as requested.
 
 
       // Populate main content

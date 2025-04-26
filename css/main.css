@@ -299,6 +299,53 @@ footer {
   }
   
   .provider-grid,
+/* --- Enhanced Mobile Styles (768px breakpoint) --- */
+
+  /* Further reduce general heading sizes */
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+
+  /* Reduce container padding on smaller screens */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Adjust stat grid for narrower screens */
+  .stat-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  /* Adjust rocket details flex layout to stack */
+  /* Selects the flex container in rocket.html's inline script */
+  main#main-content .section > .container > div[style*="display: flex"] {
+    flex-direction: column; /* Stack image and specs vertically */
+    align-items: center; /* Center items when stacked */
+  }
+
+  /* Ensure image in rocket details doesn't take full width when stacked */
+   main#main-content .section > .container > div[style*="display: flex"] > img {
+     max-width: 80%; /* Limit image width */
+     margin-bottom: var(--spacing-lg); /* Add space below image */
+   }
+
+  /* Adjust header padding */
+  header {
+      padding: var(--spacing-md) 0;
+  }
+
+  /* Adjust navigation gap and allow wrapping */
+  .nav {
+      gap: var(--spacing-md);
+      flex-wrap: wrap; /* Allow links to wrap */
+      justify-content: center; /* Center wrapped links */
+  }
+
+  /* Reduce chart height slightly */
+  .chart-container {
+      height: 300px;
+  }
+  /* --- End Enhanced Mobile Styles --- */
   .rocket-grid {
     grid-template-columns: 1fr;
   }

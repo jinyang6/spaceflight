@@ -5,7 +5,7 @@ An Apple-style minimalist website showcasing the cost efficiency of reusable roc
 **Live Site:** [https://jinyang6.github.io/spaceflight/](https://jinyang6.github.io/spaceflight/)
 ## Overview
 
-This project presents data on reusable rockets from SpaceX, LandSpace, and Blue Origin, focusing on how reusability dramatically reduces launch costs over time. The website uses dynamic content generation to display provider and rocket information from a central data source (`js/data.js`).
+This project presents data on reusable rockets from SpaceX, LandSpace, Blue Origin, and Rocket Lab, focusing on how reusability dramatically reduces launch costs over time. The website uses dynamic content generation to display provider and rocket information from a central data source (`js/data.js`).
 
 The website features:
 
@@ -72,6 +72,8 @@ The interactive 3D models used on the rocket detail pages are sourced from Sketc
 - **Starship:** ["SpaceX Starship Ship S25 & Booster 9"](https://skfb.ly/oL9CU) by Clarence365 is licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/).
 
 Models for other rockets (LandSpace, Blue Origin) are placeholders or not yet available.
+
+- **Neutron:** ["Rocketlab Neutron Rocket"](https://skfb.ly/oACvZ) by Clarence365 is licensed under [Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/)](http://creativecommons.org/licenses/by/4.0/).
 ## Features
 
 - **Dynamic Provider Pages:** Overview of each space company and their fleet.

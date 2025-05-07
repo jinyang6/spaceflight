@@ -36,12 +36,22 @@ The website features:
 │   ├── main.js             # Core JS functions, URL parsing
 │   ├── data.js             # Central data store for all providers/rockets
 │   └── charts.js           # Chart creation and visualization logic
-└── data/                   # Source images (JSON data is now in js/data.js)
-    ├── spacex/imgs/
-    ├── landspace/imgs/
-    └── blueorigin/imgs/
+└── data/                   # Provider data, images, and 3D models
+    ├── blueorigin/
+    │   ├── blueorigin.js
+    │   └── imgs/
+    ├── landspace/
+    │   ├── landspace.js
+    │   └── imgs/
+    ├── rocketlab/
+    │   ├── rocketlab.js
+    │   ├── imgs/
+    │   └── models/         # 3D models (.glb)
+    └── spacex/
+        ├── spacex.js
+        ├── imgs/
+        └── models/         # 3D models (.glb)
 ```
-*(Note: The original static `providers/` and `rockets/` directories might still exist but are no longer used by the website.)*
 
 ## How Dynamic Loading Works
 

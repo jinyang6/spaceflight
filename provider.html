@@ -17,11 +17,16 @@
     <div class="container header-inner">
       <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
       <nav class="nav" id="main-nav">
-        <!-- Nav links will be added dynamically -->
-        <a href="index.html" class="nav-link">Home</a>
+        <!-- Navigation is handled by the logo and breadcrumbs -->
       </nav>
     </div>
   </header>
+
+  <nav aria-label="breadcrumb" class="breadcrumbs-container container">
+    <ol class="breadcrumbs" id="breadcrumbs-list">
+      <!-- Breadcrumbs will be populated here -->
+    </ol>
+  </nav>
 
   <main>
     <section class="hero">
@@ -81,22 +86,32 @@
         metaDesc.setAttribute('content', `Explore ${providerData.manufacturer}'s innovative fleet of reusable rockets and how they're reducing the cost of space access.`);
       }
 
-      // Update header navigation dynamically
-      const nav = document.getElementById('main-nav');
-      Object.keys(providers).forEach(id => { // Use imported data
-        const link = document.createElement('a');
-        link.href = `provider.html?provider=${id}`;
-        link.textContent = providers[id].manufacturer; // Use imported data
-        link.classList.add('nav-link');
-        if (id === providerId) {
-          link.classList.add('active');
-        }
-        nav.appendChild(link);
-      });
-
+      // Navigation is now static with only "Home" link in HTML.
+      // Removed dynamic provider link generation for the top navigation.
+      // The static "Home" link is already in the HTML.
+      const nav = document.getElementById('main-nav'); // Define nav here
+      // We still need to mark the "Home" link as active if on the index page,
+      // or the current provider's (non-existent) nav link if we were to keep it.
+      // For now, the active class logic for provider links is removed.
+      // If on provider.html, no top nav link will be 'active' other than potentially 'Home' if logic was added.
+      // The 'active' class on the static "Home" link in provider.html should be removed if it exists,
+      // as "Home" is not the current page.
+      const homeLink = nav.querySelector('a[href="index.html"]');
+      if (homeLink) {
+        homeLink.classList.remove('active'); // Ensure Home is not marked active on provider page
+      }
 
       // Populate hero section
       document.getElementById('provider-name').textContent = providerData.manufacturer;
+
+      // --- Populate Breadcrumbs for Provider Page ---
+      const breadcrumbsList = document.getElementById('breadcrumbs-list');
+      if (breadcrumbsList) {
+        breadcrumbsList.innerHTML = `
+          <li><a href="index.html">Home</a></li>
+          <li aria-current="page">${providerData.manufacturer}</li>
+        `;
+      }
       // Add a generic description or pull from a new field if added to data.js
       document.getElementById('provider-description').textContent = `${providerData.country}-based aerospace manufacturer developing reusable rocket technology.`;
 

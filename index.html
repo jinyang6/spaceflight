@@ -17,8 +17,7 @@
     <div class="container header-inner">
       <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
       <nav class="nav" id="main-nav">
-        <!-- Nav links will be added dynamically -->
-        <a href="index.html" class="nav-link active">Home</a>
+        <!-- Navigation is handled by the logo and breadcrumbs -->
       </nav>
     </div>
   </header>
@@ -85,16 +84,9 @@
     import { getAllProvidersSummary } from './js/main.js'; // Import necessary function
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Update header navigation dynamically
-      const nav = document.getElementById('main-nav');
-      // Use imported providers object keys for navigation
-      Object.keys(providers).forEach(id => {
-        const link = document.createElement('a');
-        link.href = `provider.html?provider=${id}`;
-        link.textContent = providers[id].manufacturer; // Get manufacturer from imported data
-        link.classList.add('nav-link');
-        nav.appendChild(link);
-      });
+      // Update header navigation - keep only the static "Home" link
+      // The dynamic generation of provider links is removed as per the new site structure.
+      // The static "Home" link is already in the HTML.
 
       // Dynamically load provider cards using the summary function
       const providerGrid = document.getElementById('provider-grid');

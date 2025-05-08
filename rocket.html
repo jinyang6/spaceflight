@@ -20,11 +20,16 @@
     <div class="container header-inner">
       <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
       <nav class="nav" id="main-nav">
-        <!-- Nav links will be added dynamically -->
-        <a href="index.html" class="nav-link">Home</a>
+        <!-- Navigation is handled by the logo and breadcrumbs -->
       </nav>
     </div>
   </header>
+
+  <nav aria-label="breadcrumb" class="breadcrumbs-container container">
+    <ol class="breadcrumbs" id="breadcrumbs-list">
+      <!-- Breadcrumbs will be populated here -->
+    </ol>
+  </nav>
 
   <main id="main-content">
     <!-- Rocket details will be loaded here -->
@@ -69,15 +74,25 @@
       }
 
       // --- Update Header Navigation ---
-      Object.keys(providers).forEach(id => {
-        const link = document.createElement('a');
-        link.href = `provider.html?provider=${id}`;
-        link.textContent = providers[id].manufacturer;
-        link.classList.add('nav-link');
-        // Optionally highlight the current provider group if desired
-        // if (id === providerId) link.classList.add('active');
-        nav.appendChild(link);
-      });
+      // Navigation is now static with only "Home" link in HTML.
+      // Removed dynamic provider link generation for the top navigation.
+      // The static "Home" link is already in the HTML.
+      // Ensure "Home" link is not marked active on rocket page.
+      // const nav = document.getElementById('main-nav'); // nav is already defined at line 50
+      const homeLink = nav.querySelector('a[href="index.html"]');
+      if (homeLink) {
+        homeLink.classList.remove('active');
+      }
+
+      // --- Populate Breadcrumbs for Rocket Page ---
+      const breadcrumbsList = document.getElementById('breadcrumbs-list');
+      if (breadcrumbsList) {
+        breadcrumbsList.innerHTML = `
+          <li><a href="index.html">Home</a></li>
+          <li><a href="provider.html?provider=${providerId}">${providerData.manufacturer}</a></li>
+          <li aria-current="page">${rocket.name}</li>
+        `;
+      }
 
       // --- Helper Functions ---
       const createStatCard = (value, label) => {

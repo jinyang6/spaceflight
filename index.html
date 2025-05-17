@@ -11,25 +11,39 @@
   <script src="js/data.js" type="module"></script>
   <script src="js/main.js" type="module"></script>
   <!-- charts.js not needed on index page -->
+  <!-- MWC components are now imported via js/material-components.js in the main script block -->
 </head>
 <body>
   <header>
     <div class="container header-inner">
-      <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
-      <nav class="nav" id="main-nav">
+      <div class="logo"><a href="index.html">Reusable Rockets</a></div>
+      <!-- <nav class="nav" id="main-nav"> -->
         <!-- Navigation is handled by the logo and breadcrumbs -->
-      </nav>
+      <!-- </nav> -->
     </div>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero-section"> <!-- Changed class, removed inline styles -->
       <div class="container">
-        <h1 class="hero-title">Reusable Rockets</h1>
-        <p class="hero-subtitle">Revolutionizing access to space through cost-efficient, reusable launch vehicles that are transforming the economics of spaceflight.</p>
+        <h1 class="hero-title">Reusable Rocket Directory</h1> <!-- Removed inline styles -->
+        <p class="hero-subtitle">An overview of companies advancing reusable spaceflight technology.</p> <!-- Removed inline styles -->
       </div>
     </section>
 
+    <section class="section" id="providers-section">
+      <div class="container">
+        <h2 class="section-title">Launch Providers</h2> <!-- Added class, removed inline style -->
+        <p>Several companies are leading the charge in reusable rocket technology, each with their own approach to reducing launch costs while maximizing payload capacity.</p>
+
+        <div class="provider-grid" id="provider-grid">
+          <!-- Provider cards will be added dynamically -->
+          <div class="provider-card placeholder">Loading providers...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keeping other sections for now, will restyle their stat cards next -->
     <section class="section">
       <div class="container">
         <h2>The Economics of Reusability</h2>
@@ -51,19 +65,7 @@
         </div>
       </div>
     </section>
-
-    <section class="section">
-      <div class="container">
-        <h2>Innovative Launch Providers</h2>
-        <p>Several companies are leading the charge in reusable rocket technology, each with their own approach to reducing launch costs while maximizing payload capacity.</p>
-
-        <div class="provider-grid" id="provider-grid">
-          <!-- Provider cards will be added dynamically -->
-          <div class="provider-card placeholder">Loading providers...</div>
-        </div>
-      </div>
-    </section>
-
+    
     <section class="section">
       <div class="container">
         <h2>The Impact of Reusability</h2>
@@ -80,8 +82,10 @@
   </footer>
 
   <script type="module"> // Add type="module"
+    import './js/material-components.js'; // Import all MWC components
     import { providers } from './js/data.js'; // Import data
     import { getAllProvidersSummary } from './js/main.js'; // Import necessary function
+    // Individual MWC component imports (like filled-button) are now handled in material-components.js
 
     document.addEventListener('DOMContentLoaded', () => {
       // Update header navigation - keep only the static "Home" link
@@ -97,19 +101,19 @@
       if (providersSummary && providersSummary.length > 0) {
         providersSummary.forEach(provider => {
           const card = document.createElement('div');
-          card.classList.add('provider-card');
+          card.classList.add('provider-card'); // Use a class for styling with CSS
 
-          // Use data from the summary function
           const description = `${provider.country}-based aerospace company developing reusable rocket technology. Fleet includes ${provider.vehicleCount} vehicle(s).`;
-          // Image path logic is now handled within getAllProvidersSummary
           const imagePath = provider.image;
-
+          
           card.innerHTML = `
-            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" loading="lazy" decoding="async" onerror="this.src='assets/placeholder.png'; this.alt='Placeholder image'">
+            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" loading="lazy" decoding="async" onerror="this.style.display='none';">
             <div class="provider-content">
               <h3 class="provider-title">${provider.manufacturer}</h3>
               <p class="provider-description">${description}</p>
-              <a href="provider.html?provider=${provider.id}" class="provider-link">Explore ${provider.manufacturer} Fleet →</a>
+              <div class="provider-actions">
+                <md-filled-button href="provider.html?provider=${provider.id}">Explore Fleet</md-filled-button>
+              </div>
             </div>
           `;
           providerGrid.appendChild(card);

@@ -72,7 +72,8 @@ function initCostPerLaunchChart(canvas) {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: true, // Changed to true
+          aspectRatio: 2.5,         // Added: makes chart wider (width/height)
           plugins: {
             legend: {
               display: false

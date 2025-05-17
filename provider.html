@@ -11,14 +11,15 @@
   <script src="js/data.js" type="module"></script>
   <script src="js/main.js" type="module"></script>
   <!-- charts.js not needed on provider page -->
+  <!-- MWC components are now imported via js/material-components.js in the main script block -->
 </head>
 <body>
   <header>
     <div class="container header-inner">
-      <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Reusable Rockets</a></div>
-      <nav class="nav" id="main-nav">
+      <div class="logo"><a href="index.html">Reusable Rockets</a></div>
+      <!-- <nav class="nav" id="main-nav"> -->
         <!-- Navigation is handled by the logo and breadcrumbs -->
-      </nav>
+      <!-- </nav> -->
     </div>
   </header>
 
@@ -29,7 +30,7 @@
   </nav>
 
   <main>
-    <section class="hero">
+    <section class="hero-section hero-section--compact"> <!-- Added modifier class -->
       <div class="container">
         <h1 class="hero-title" id="provider-name">Provider Name</h1>
         <p class="hero-subtitle" id="provider-description">Provider description goes here.</p>
@@ -63,9 +64,11 @@
   </footer>
 
   <script type="module"> // Add type="module"
+    import './js/material-components.js'; // Import all MWC components
     import { providers } from './js/data.js'; // Import data
     // Import helpers needed for this page
     import { formatCurrency, formatCompactNumber } from './js/main.js';
+    // Individual MWC component imports are now handled in material-components.js
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -86,20 +89,8 @@
         metaDesc.setAttribute('content', `Explore ${providerData.manufacturer}'s innovative fleet of reusable rockets and how they're reducing the cost of space access.`);
       }
 
-      // Navigation is now static with only "Home" link in HTML.
-      // Removed dynamic provider link generation for the top navigation.
-      // The static "Home" link is already in the HTML.
-      const nav = document.getElementById('main-nav'); // Define nav here
-      // We still need to mark the "Home" link as active if on the index page,
-      // or the current provider's (non-existent) nav link if we were to keep it.
-      // For now, the active class logic for provider links is removed.
-      // If on provider.html, no top nav link will be 'active' other than potentially 'Home' if logic was added.
-      // The 'active' class on the static "Home" link in provider.html should be removed if it exists,
-      // as "Home" is not the current page.
-      const homeLink = nav.querySelector('a[href="index.html"]');
-      if (homeLink) {
-        homeLink.classList.remove('active'); // Ensure Home is not marked active on provider page
-      }
+      // Navigation is now handled by the md-top-app-bar and breadcrumbs.
+      // The old logic for manipulating 'main-nav' and 'active' classes is no longer needed.
 
       // Populate hero section
       document.getElementById('provider-name').textContent = providerData.manufacturer;
@@ -135,7 +126,7 @@
             <img src="${imagePath}" alt="${rocket.name} rocket" class="rocket-image" loading="lazy" decoding="async" onerror="this.style.display='none'">
             <div class="rocket-content">
               <h3 class="rocket-title">${rocket.name}</h3>
-              <p class="rocket-description">${rocket.payloadToLEO_kg !== null && rocket.payloadToLEO_kg > 0 ? `Delivers ${formatCompactNumber(rocket.payloadToLEO_kg)}kg to LEO.` : 'Suborbital vehicle.'}</p>
+              <p class="rocket-description">${rocket.payloadToLEO_t !== null && rocket.payloadToLEO_t > 0 ? `Delivers ${rocket.payloadToLEO_t} t to LEO.` : (rocket.payloadToLEO_t === 0 ? 'Suborbital / Test Vehicle' : 'Payload N/A')}</p>
               <div class="stat-grid">
                 <div class="stat-card">
                   <div class="stat-value">${rocket.reusableStages}</div>
@@ -150,7 +141,9 @@
                   <div class="stat-label">Est. 20th Launch Cost</div>
                 </div>
               </div>
-              <a href="rocket.html?provider=${providerId}&rocket=${rocket.id}" class="rocket-link">View Detailed Analysis →</a>
+              <div class="rocket-actions" style="text-align: right; margin-top: auto; padding-top: var(--spacing-sm);"> <!-- Wrapper for alignment -->
+                <md-outlined-button href="rocket.html?provider=${providerId}&rocket=${rocket.id}">Explore Rocket <span aria-hidden="true">&rarr;</span></md-outlined-button>
+              </div>
             </div>
           `;
           rocketGrid.appendChild(card);

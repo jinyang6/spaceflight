@@ -1,487 +1,504 @@
-/* 
- * Reusable Rockets - Main Stylesheet
- * An Apple-style minimalist design
- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,700&family=Roboto:wght@300;400;500;700&display=swap');
 
+/* --- Material 3 Base Styles & Theme --- */
 :root {
-  /* Core color palette */
-  --color-background: #ffffff;
-  --color-text-primary: #000000;
-  --color-text-secondary: #666666;
-  --color-accent: #007aff;
-  --color-accent-light: #e6f2ff;
-  --color-border: #e6e6e6;
+  /* Material 3 Theme Tokens - Seed Color: #004A7F (Space Blue) - Light Theme */
   
-  /* Spacing variables */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 4rem;
+  /* Primary */
+  --md-sys-color-primary: #006493; /* Derived from #004A7F */
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #C9E6FF;
+  --md-sys-color-on-primary-container: #001E30;
+  /* Secondary (Example: a complementary cool gray or a muted teal) */
+  --md-sys-color-secondary: #4E616D;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #D1E5F3;
+  --md-sys-color-on-secondary-container: #0A1E28;
+  /* Tertiary (Example: a subtle warm accent like a muted orange or gold for highlights) */
+  --md-sys-color-tertiary: #625B71; /* Keeping a neutral tertiary for now, can be adjusted */
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #E8DEF8;
+  --md-sys-color-on-tertiary-container: #1D192B;
+  /* Error */
+  --md-sys-color-error: #BA1A1A;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+  /* Background */
+  --md-sys-color-background: #FCFCFF; /* Very light, almost white */
+  --md-sys-color-on-background: #1A1C1E;
+  /* Surface */
+  --md-sys-color-surface: #FCFCFF;
+  --md-sys-color-on-surface: #1A1C1E;
+  --md-sys-color-surface-variant: #DDE3EA; /* Lighter gray for surfaces */
+  --md-sys-color-on-surface-variant: #41484D;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #F6F9FC; /* Slightly off-white */
+  --md-sys-color-surface-container: #F0F4F8;
+  --md-sys-color-surface-container-high: #EAEEF2;
+  --md-sys-color-surface-container-highest: #E4E8EC;
+  /* Outline */
+  --md-sys-color-outline: #71787E;
+  --md-sys-color-outline-variant: #C1C7CE;
+  /* Inverse */
+  --md-sys-color-inverse-primary: #8ACEFF;
+  --md-sys-color-inverse-on-surface: #F0F1F3;
+  --md-sys-color-inverse-surface: #2E3133;
+  /* Scrim */
+  --md-sys-color-scrim: #000000;
+  /* Shadow */
+  --md-sys-color-shadow: #000000;
+
+  /* Typography (Material 3) */
+  --md-sys-typescale-font-family-name: 'Roboto Flex', 'Roboto', sans-serif;
+  --md-sys-typescale-font-family-brand: var(--md-sys-typescale-font-family-name);
+  --md-sys-typescale-font-family-plain: var(--md-sys-typescale-font-family-name);
   
-  /* Typography variables */
-  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Common font weights */
+  --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
-}
 
-/* Base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  /* Spacing (M3 uses a 4dp grid, these are examples) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border Radius (M3 Shape Scale examples) */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-xs: 4px;
+  --md-sys-shape-corner-sm: 8px;
+  --md-sys-shape-corner-md: 12px;
+  --md-sys-shape-corner-lg: 16px;
+  --md-sys-shape-corner-xl: 28px;
+  --md-sys-shape-corner-full: 999px; /* For pills, circular elements */
+
+  /* Elevation (Simplified examples; M3 has 5 levels + 0) */
+  /* Use box-shadow with these colors or dedicated MWC elevation styles */
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level2: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0, 0, 0, 0.3), 0px 2px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0, 0, 0, 0.3), 0px 4px 4px rgba(0, 0, 0, 0.15);
+
+  /* Transitions (M3 uses specific easing curves like emphasizing, standard) */
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-duration-short1: 100ms; /* Example durations */
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-long1: 400ms;
 }
 
 html {
-  font-size: 16px;
+  box-sizing: border-box;
+  font-size: 16px; 
   scroll-behavior: smooth;
 }
 
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
-  font-family: var(--font-primary);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  line-height: 1.5;
+  margin: 0;
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5; 
+  color: var(--md-sys-color-on-background);
+  background-color: var(--md-sys-color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-md);
-}
-
+/* Basic M3 type styles (can be expanded) */
 h1 {
-  font-size: 3rem;
-  letter-spacing: -0.03em;
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 2.5rem; /* displayMedium approx */
+  font-weight: var(--font-weight-regular);
+  line-height: 3rem;
+  letter-spacing: 0px;
+  margin-bottom: var(--spacing-lg);
 }
 
 h2 {
-  font-size: 2.5rem;
-  letter-spacing: -0.02em;
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 2rem; /* headlineLarge approx */
+  font-weight: var(--font-weight-regular);
+  line-height: 2.5rem;
+  margin-bottom: var(--spacing-md);
 }
 
 h3 {
-  font-size: 2rem;
-  letter-spacing: -0.01em;
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 1.75rem; /* titleLarge approx */
+  font-weight: var(--font-weight-medium);
+  line-height: 2.25rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 p {
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 1rem; /* bodyLarge */
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5rem;
   margin-bottom: var(--spacing-md);
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--md-sys-color-primary);
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  font-weight: var(--font-weight-medium);
 }
 
 a:hover {
-  opacity: 0.8;
+  text-decoration: underline;
 }
 
-/* Layout components */
+/* Layout helpers (can be refined with M3 principles) */
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1200px; /* Or adjust based on M3 layout guidance */
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 }
 
 .section {
   padding: var(--spacing-xl) 0;
-  border-bottom: 1px solid var(--color-border);
 }
 
-.section:last-of-type {
-  border-bottom: none;
+/* --- MWC Component Specific Overrides/Styling --- */
+/* Example: Ensure MWC buttons use the theme colors */
+md-filled-button {
+  --md-filled-button-container-color: var(--md-sys-color-primary);
+  --md-filled-button-label-text-color: var(--md-sys-color-on-primary);
+  /* Add more overrides as needed for other MWC components */
 }
 
-/* Header styles */
+/* --- Header (Custom M3 Style) --- */
 header {
-  padding: var(--spacing-lg) 0;
-  border-bottom: 1px solid var(--color-border);
+  background-color: var(--md-sys-color-surface-container); /* M3 Surface Container color */
+  padding: var(--spacing-sm) 0; /* Adjust padding as needed */
+  box-shadow: var(--md-sys-elevation-level1); /* M3 Elevation */
+  /* border-bottom: 1px solid var(--md-sys-color-outline-variant); */ /* Alternative to shadow */
 }
 
 .header-inner {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* If other items were in header */
   align-items: center;
+  /* .container class already handles max-width and padding */
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-bold);
+.logo a {
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 1.375rem; /* M3 title-medium (22sp) or title-large (24sp) */
+  font-weight: var(--font-weight-medium); /* Or 400 for M3 "Regular" title */
+  color: var(--md-sys-color-on-surface-container); /* Text color on the header's surface container */
+  text-decoration: none;
+  padding: var(--spacing-xs) 0; /* Minimal vertical padding for the link itself */
 }
 
-.nav {
+/* --- Breadcrumbs (Example M3 Style) --- */
+.breadcrumbs-container {
+  padding-top: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  margin-bottom: var(--spacing-lg);
+}
+
+.breadcrumbs {
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 0.875rem; /* labelLarge or bodyMedium */
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  gap: var(--spacing-lg);
+  flex-wrap: wrap;
 }
 
-.nav-link {
+.breadcrumbs li {
+  display: inline;
+}
+
+.breadcrumbs li + li::before {
+  content: ">";
+  padding: 0 0.6em;
+  color: var(--md-sys-color-outline);
+}
+
+.breadcrumbs a {
+  color: var(--md-sys-color-primary); /* Use primary for links */
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs li[aria-current="page"] {
   font-weight: var(--font-weight-medium);
+  color: var(--md-sys-color-on-surface);
 }
 
-/* Hero section */
-.hero {
-  text-align: center;
-  padding: var(--spacing-xl) 0;
+/* --- Provider Grid & Cards (Basic M3 Structure) --- */
+.provider-grid, .rocket-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
 }
 
-.hero-title {
-  font-size: 4rem;
-  margin-bottom: var(--spacing-md);
-  letter-spacing: -0.03em;
-}
+/* --- Provider Grid & Custom Cards (M3 Styled) --- */
+/* .provider-grid and .rocket-grid are already defined with grid layout */
 
-.hero-subtitle {
-  font-size: 1.5rem;
-  color: var(--color-text-secondary);
-  max-width: 800px;
-  margin: 0 auto var(--spacing-lg);
-}
-
-/* Provider section */
-.provider-card {
+.provider-card { /* This will be our custom M3-style card */
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-lg); /* 12px */
+  box-shadow: var(--md-sys-elevation-level1);
+  transition: box-shadow 0.2s var(--md-sys-motion-easing-standard);
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: var(--spacing-lg);
+  overflow: hidden; /* Ensures image border-radius is respected if image is direct child */
 }
 
 .provider-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--md-sys-elevation-level3);
 }
 
-.provider-image {
+.provider-card .provider-image {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 180px; /* Fixed height for consistency */
+  object-fit: cover; /* Cover to fill, might crop; use 'contain' if full logo visibility is key */
+  /* border-radius: var(--md-sys-shape-corner-lg) var(--md-sys-shape-corner-lg) 0 0; */ /* If image is flush at top */
+  /* No margin-bottom if using padding on content wrapper */
 }
 
-.provider-content {
-  padding: var(--spacing-lg);
-}
-
-.provider-title {
-  margin-bottom: var(--spacing-sm);
-}
-
-.provider-description {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-md);
-}
-
-.provider-link {
-  align-self: flex-start;
-  font-weight: var(--font-weight-medium);
-}
-
-/* Provider grid */
-.provider-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-/* Rocket card */
-.rocket-card {
+.provider-card .provider-content {
+  padding: var(--spacing-md); /* 16px */
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background);
-  border-radius: 8px;
+  flex-grow: 1; /* Allows content to fill card and push actions down */
+}
+
+.provider-card .provider-title {
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 1.375rem; /* titleMedium */
+  font-weight: var(--font-weight-medium);
+  line-height: 1.75rem;
+  color: var(--md-sys-color-on-surface);
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm); /* 8px */
+}
+
+.provider-card .provider-description {
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 0.875rem; /* bodyMedium */
+  line-height: 1.25rem;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--spacing-md); /* 16px */
+  flex-grow: 1; /* Takes up available space */
+  min-height: 3.5em;
+}
+
+.provider-card .provider-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-sm); /* Space above actions if content doesn't push it down */
+  /* margin-top: auto; // This is implicitly handled by flex-grow on description */
+}
+
+/* --- Rocket Cards (M3 Styled) --- */
+.rocket-card {
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-lg);
+  box-shadow: var(--md-sys-elevation-level1);
+  transition: box-shadow 0.2s var(--md-sys-motion-easing-standard);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: var(--spacing-lg);
 }
 
 .rocket-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--md-sys-elevation-level3);
 }
 
-.rocket-image {
+.rocket-card .rocket-image {
   width: 100%;
-  height: 250px;
-  object-fit: contain;
-  background-color: var(--color-accent-light);
+  height: 160px; /* Slightly smaller than provider image */
+  object-fit: contain; /* Changed to contain to show full rocket */
+  background-color: var(--md-sys-color-surface-container-highest); /* Add a subtle bg for letterboxing */
 }
 
-.rocket-content {
-  padding: var(--spacing-lg);
+.rocket-card .rocket-content {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-.rocket-title {
-  margin-bottom: var(--spacing-sm);
-}
-
-.rocket-description {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-md);
-}
-
-.rocket-link {
-  align-self: flex-start;
+.rocket-card .rocket-title {
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 1.25rem; /* titleMedium or titleSmall */
   font-weight: var(--font-weight-medium);
+  line-height: 1.625rem;
+  color: var(--md-sys-color-on-surface);
+  margin-top: 0;
+  margin-bottom: var(--spacing-xs); /* Less space for a tighter look */
 }
 
-/* Rocket grid */
-.rocket-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
+.rocket-card .rocket-description {
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 0.875rem; /* bodyMedium */
+  line-height: 1.25rem;
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--spacing-md);
+  /* No flex-grow here, as stats and actions follow */
 }
 
-/* Stat grid */
+.rocket-card .stat-grid {
+  margin-top: var(--spacing-sm); /* Less margin inside card */
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm); /* Tighter gap for nested stats */
+}
+
+/* Adjust nested stat-card padding if needed, or they inherit global .stat-card styles */
+.rocket-card .stat-card {
+  padding: var(--spacing-sm); /* Smaller padding for nested stats */
+  background-color: var(--md-sys-color-surface-container); /* Match global stat card bg */
+}
+.rocket-card .stat-value {
+  font-size: 1.25rem; /* Smaller for nested stats */
+  line-height: 1.5rem;
+}
+.rocket-card .stat-label {
+  font-size: 0.75rem; /* labelSmall */
+}
+
+
+.rocket-card .rocket-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto; /* Push to bottom */
+  padding-top: var(--spacing-sm);
+}
+
+.rocket-card .rocket-actions md-text-button {
+  /* MWC components use CSS custom properties for theming */
+  /* --md-text-button-label-text-color: var(--md-sys-color-primary); */
+  /* This should be inherited from global theme or component defaults */
+}
+
+
+/* Stat Grid & Cards (Basic M3 Structure) - Global styles */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-  margin: var(--spacing-lg) 0;
+  gap: var(--spacing-md); /* 16px */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Slightly wider min for better text flow */
+  margin-top: var(--spacing-lg); /* 24px */
 }
 
 .stat-card {
-  background-color: var(--color-accent-light);
-  padding: var(--spacing-lg);
-  border-radius: 8px;
+  background-color: var(--md-sys-color-surface-container-high); /* Using a slightly more distinct surface */
+  padding: var(--spacing-lg); /* More padding: 24px */
+  border-radius: var(--md-sys-shape-corner-lg); /* 12px, M3 Medium */
   text-align: center;
+  border: 1px solid var(--md-sys-color-outline-variant); /* Subtle border */
 }
 
 .stat-value {
-  font-size: 1.75rem; /* Slightly smaller font size */
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-xs);
-  overflow-wrap: break-word; /* Allow long words to break and wrap */
-  word-wrap: break-word; /* Legacy fallback */
-  hyphens: auto; /* Optional: Improve wrapping */
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 2rem; /* headlineMedium approx */
+  font-weight: var(--font-weight-medium); /* M3 often uses regular for headlines, but medium can stand out */
+  line-height: 2.5rem;
+  color: var(--md-sys-color-primary); /* Keep primary color for emphasis */
+  margin-bottom: var(--spacing-sm); /* 8px */
+  display: block; /* Ensure it takes full width for centering if text is short */
 }
 
 .stat-label {
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 0.875rem; /* bodyMedium */
+  line-height: 1.25rem;
+  color: var(--md-sys-color-on-surface-variant); /* Good for less emphasized text */
 }
 
-/* Chart container */
-.chart-container {
-  width: 100%;
-  height: 400px;
-  margin: var(--spacing-lg) 0;
-}
-
-/* Footer */
+/* --- Footer (Example M3 Style) --- */
 footer {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
   padding: var(--spacing-lg) 0;
-  background-color: var(--color-accent-light);
   text-align: center;
-  color: var(--color-text-secondary);
+  font-size: 0.875rem; /* bodyMedium */
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-  
-  .section {
-    padding: var(--spacing-lg) 0;
-  }
-  
-  .provider-grid,
-/* --- Enhanced Mobile Styles (768px breakpoint) --- */
-
-  /* Further reduce general heading sizes */
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.75rem; }
-
-  /* Reduce container padding on smaller screens */
-  .container {
-    padding: 0 var(--spacing-md);
-  }
-
-  /* Adjust stat grid for narrower screens */
-  .stat-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
-
-  /* Adjust rocket details flex layout to stack */
-  /* Selects the flex container in rocket.html's inline script */
-  main#main-content .section > .container > div[style*="display: flex"] {
-    flex-direction: column; /* Stack image and specs vertically */
-    align-items: center; /* Center items when stacked */
-  }
-
-  /* Ensure image in rocket details doesn't take full width when stacked */
-   main#main-content .section > .container > div[style*="display: flex"] > img {
-     max-width: 80%; /* Limit image width */
-     margin-bottom: var(--spacing-lg); /* Add space below image */
-   }
-
-  /* Adjust header padding */
-  header {
-      padding: var(--spacing-md) 0;
-  }
-
-  /* Adjust navigation gap and allow wrapping */
-  .nav {
-      gap: var(--spacing-md);
-      flex-wrap: wrap; /* Allow links to wrap */
-      justify-content: center; /* Center wrapped links */
-  }
-
-  /* Reduce chart height slightly */
-  .chart-container {
-      height: 300px;
-  }
-  /* --- End Enhanced Mobile Styles --- */
-  .rocket-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* --- 3D Model Viewer Styles --- */
-.model-section h2 {
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-}
-
-.model-viewer-container {
-  margin-bottom: var(--spacing-md);
-}
-
-/* model-viewer itself is styled inline for height/width/background */
-
-.model-credit {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  text-align: center;
-  margin-top: var(--spacing-md);
-}
-
-/* Responsive adjustments for model viewer height */
-@media (max-width: 768px) {
-  .model-viewer-container model-viewer {
-    height: 400px !important; /* Reduce height on smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  .model-viewer-container model-viewer {
-    height: 300px !important; /* Further reduce height on very small screens */
-  }
-}
-/* --- End 3D Model Viewer Styles --- */
-.model-interaction-hint {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  text-align: center;
-  margin-top: var(--spacing-sm); /* Smaller margin than credit */
-}
-/* --- Guided Model Loader Styles --- */
-.model-section-placeholder .container {
-  /* Keep container centered */
-  text-align: center;
-}
-
-/* --- Guided Model Loader Styles --- */
+/* --- Model Viewer Section (Basic M3 Structure) --- */
 .model-section-placeholder .container {
   text-align: center;
 }
 
 .model-loader-visual {
-  /* Refined placeholder block style */
-  /* border: 1px dashed var(--color-border); */ /* Removed border */
-  border-radius: 12px; /* Slightly larger radius */
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-xl);
   padding: var(--spacing-xl);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-md);
-  background-color: #f9f9f9; /* Lighter background */
   max-width: 400px;
   margin: var(--spacing-lg) auto;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-  transition: box-shadow 0.3s ease;
-}
-.model-loader-visual:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Enhance shadow on hover */
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .model-loader-icon {
-  width: 64px; /* Slightly smaller icon */
+  width: 64px;
   height: 64px;
-  /* Assuming SVG: color it with accent color */
-  /* Use mask for PNGs or ensure SVG fill is controllable */
-  /* filter: invert(38%) sepia(98%) saturate(2748%) hue-rotate(198deg) brightness(104%) contrast(104%); */ /* Example filter for accent blue */
-  /* fill: var(--color-accent); */ /* Simpler if SVG */
-  color: var(--color-accent); /* Try setting color, might work for some SVGs */
+  color: var(--md-sys-color-primary); /* Use primary color for icon */
   opacity: 0.8;
 }
 
 .model-loader-title {
-  font-size: 1.1rem; /* Slightly smaller */
+  font-size: 1.25rem; /* titleMedium */
   font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary); /* Darker text */
+  color: var(--md-sys-color-on-surface);
   margin-bottom: var(--spacing-sm);
 }
 
-.model-loader-visual .cta-button {
-  /* Ensure button uses standard CTA style */
-  margin-top: var(--spacing-sm);
-  background-color: var(--color-accent);
-  color: var(--color-background);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: 6px;
-  font-weight: var(--font-weight-medium);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.model-loader-visual .cta-button:hover {
-    background-color: #0056b3; /* Darker accent on hover */
-}
-
-
 .model-not-available {
-  /* Refined "Not Available" text style */
-  color: var(--color-text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   padding: var(--spacing-xl);
   font-style: italic;
-  border: 1px solid var(--color-border); /* Solid border */
-  background-color: #f9f9f9;
-  border-radius: 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-lg);
   display: inline-block;
   max-width: 400px;
   margin: var(--spacing-lg) auto;
 }
 
 .model-instructions-overlay {
-  /* Keep overlay styles */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--md-sys-color-scrim); /* Use scrim color */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
-  z-index: 1000;
+  z-index: 1000; /* M3 uses specific z-index values for dialogs etc. */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.3s var(--md-sys-motion-easing-standard), visibility 0.3s var(--md-sys-motion-easing-standard);
 }
 
 .model-instructions-overlay[style*="display: flex"] {
@@ -490,25 +507,25 @@ footer {
 }
 
 .modal-content {
-  /* Refined modal box style */
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
+  background-color: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
   padding: var(--spacing-xl);
-  border-radius: 12px; /* Match loader radius */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: var(--md-sys-shape-corner-xl); /* M3 Dialog shape */
+  box-shadow: var(--md-sys-elevation-level3);
   max-width: 90%;
   width: 600px;
   text-align: center;
 }
 
-.modal-content h3 {
+.modal-content h3 { /* For "How to Interact" */
+  font-size: 1.5rem; /* titleLarge */
+  color: var(--md-sys-color-on-surface);
   margin-bottom: var(--spacing-lg);
-  color: var(--color-text-primary);
 }
 
 .instructions-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
   width: 100%;
@@ -525,98 +542,135 @@ footer {
   width: 48px;
   height: 48px;
   margin-bottom: var(--spacing-sm);
-  filter: none; /* Ensure icons are visible on white */
-}
-.instruction-item img.inline-icon {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 var(--spacing-xs);
-    filter: none;
+  color: var(--md-sys-color-on-surface-variant); /* If SVGs can inherit color */
 }
 
 .instruction-item span {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  font-size: 0.875rem; /* bodyMedium */
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-#instructions-ok-btn {
-  /* Refined "Okay, Got It!" button style */
-  background-color: var(--color-accent);
-  color: var(--color-background);
-  border: none;
-  padding: var(--spacing-md) var(--spacing-lg);
-  margin-top: var(--spacing-md);
-  border-radius: 6px; /* Match loader button */
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-#instructions-ok-btn:hover {
-    background-color: #0056b3; /* Darker accent on hover */
+/* Ensure MWC buttons in modals also get themed if not inheriting */
+.modal-content md-filled-button,
+.model-loader-visual md-filled-button {
+    /* These might inherit from the global md-filled-button style already */
+    /* but can be specifically targeted if needed */
+    margin-top: var(--spacing-md);
 }
 
-/* Responsive for instructions modal */
-@media (max-width: 600px) {
-  .instructions-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-  .modal-content h3 {
-      font-size: 1.5rem;
-  }
-}
-
-/* Ensure viewer container takes space */
 .model-viewer-container {
     min-height: 300px;
+    background-color: var(--md-sys-color-surface-container-lowest); /* Light background for viewer */
+    border-radius: var(--md-sys-shape-corner-lg);
+    margin-top: var(--spacing-lg);
+}
+.model-credit {
+    font-size: 0.75rem; /* caption */
+    color: var(--md-sys-color-on-surface-variant);
+    margin-top: var(--spacing-sm);
+    text-align: center;
+}
+/* --- Hero Section (M3 Style) --- */
+.hero-section {
+  padding: var(--spacing-xl) 0 var(--spacing-lg) 0; /* Generous padding */
+  text-align: center;
+  background-color: var(--md-sys-color-surface-container-low); /* A slightly off-main-bg color */
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
-/* --- End Guided Model Loader Styles --- */
-/* --- Breadcrumbs Styles --- */
-.breadcrumbs-container {
-  padding-top: var(--spacing-md);
-  padding-bottom: var(--spacing-sm); /* Less padding at bottom */
-  border-bottom: 1px solid var(--color-border-light); /* Subtle separator from main content */
-  margin-bottom: var(--spacing-lg); /* Space before main content starts */
+.hero-section .hero-title {
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 2.8rem; /* Approx M3 displaySmall */
+  font-weight: var(--font-weight-regular); /* M3 display fonts are often regular weight */
+  line-height: 3.25rem;
+  letter-spacing: 0px;
+  color: var(--md-sys-color-on-surface);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
 }
 
-.breadcrumbs {
-  font-size: 0.875em; /* Slightly smaller than body text */
-  color: var(--color-text-secondary); /* Muted text color */
+.hero-section .hero-subtitle {
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 1.125rem; /* Approx M3 titleLarge or headlineSmall */
+  font-weight: var(--font-weight-regular);
+  line-height: 1.75rem;
+  color: var(--md-sys-color-on-surface-variant);
+  max-width: 700px; /* Constrain subtitle width for readability */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0; /* No margin if it's the last element in hero */
+}
+.hero-section--compact .hero-title {
+  font-size: 2rem; /* headlineLarge or headlineMedium */
+  line-height: 2.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
-.breadcrumbs ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex; /* Align items horizontally */
-  flex-wrap: wrap; /* Allow wrapping on small screens */
+.hero-section--compact .hero-subtitle {
+  font-size: 1rem; /* titleMedium or bodyLarge */
+  line-height: 1.5rem;
+  max-width: 600px; /* Slightly smaller max-width for subtitles on detail pages */
+}
+/* --- List Styling (M3 Inspired) --- */
+ul, ol {
+  padding-left: var(--spacing-xl); /* M3 lists often have around 24-40dp indent for text after marker */
+  margin-bottom: var(--spacing-md);
 }
 
-.breadcrumbs li {
-  display: inline; /* Items flow inline */
+li {
+  margin-bottom: var(--spacing-sm); /* Space between list items */
+  padding-left: var(--spacing-xs); /* Small space between marker and text if needed */
+  font-family: var(--md-sys-typescale-font-family-plain);
+  font-size: 1rem; /* bodyLarge */
+  line-height: 1.5rem;
+  color: var(--md-sys-color-on-surface); /* Or on-background */
 }
 
-.breadcrumbs li + li::before { /* Add separator */
-  content: ">";
-  padding: 0 0.6em; /* Space around separator */
-  color: var(--color-text-placeholder); /* Even more subtle separator color */
+/* For unordered lists, ensure default marker is fine or customize */
+ul li::marker {
+  /* color: var(--md-sys-color-primary); */ /* Optional: color the bullet points */
+}
+/* .rocket-visuals-column is no longer used after HTML restructure */
+/* --- Chart Container (M3 Style) --- */
+.chart-container {
+  padding: var(--spacing-md);
+  background-color: var(--md-sys-color-surface-container-lowest); /* A very light bg */
+  border-radius: var(--md-sys-shape-corner-lg);
+  margin-top: var(--spacing-lg);
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+/* --- Rocket Detail Page Layout & Image --- */
+.rocket-detail-layout {
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  gap: var(--spacing-lg); /* Gap between image and specs */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-.breadcrumbs a {
-  color: var(--color-text-secondary); /* Link color same as muted text for subtlety */
-  text-decoration: none;
-  transition: color 0.2s ease;
+.rocket-detail-image {
+  flex-basis: 320px; /* Significantly larger for a more prominent look */
+  width: 320px;       /* Explicit width */
+  max-width: 40%;     /* Max width as a percentage of its container, adjust as needed */
+  height: auto;       /* Maintain aspect ratio */
+  flex-shrink: 0;     /* Don't shrink image container */
+  object-fit: contain; /* Ensure entire image is visible within the bounds */
+  border-radius: var(--md-sys-shape-corner-lg); /* M3 rounded corners */
+  background-color: #000000; /* Black background for letterboxing */
+  border: 1px solid var(--md-sys-color-outline-variant); /* Subtle border */
+  /* align-self: stretch; Removed as it might not be ideal with object-fit: contain */
 }
 
-.breadcrumbs a:hover {
-  color: var(--color-accent); /* Accent color on hover */
-  text-decoration: underline;
+.rocket-detail-specs {
+  flex-grow: 1; /* Allow specs section to take remaining space */
+  min-width: 300px; /* Ensure it has some minimum width before wrapping */
 }
 
-.breadcrumbs li[aria-current="page"] {
-  font-weight: var(--font-weight-medium); /* Slightly bolder for current page */
-  color: var(--color-text-primary); /* Primary text color for current page */
+.rocket-detail-specs h2 { /* "Technical Specifications" title */
+  font-family: var(--md-sys-typescale-font-family-brand);
+  font-size: 1.75rem; /* M3 titleLarge / headlineSmall */
+  font-weight: var(--font-weight-bold); /* Make it bolder for more presence */
+  line-height: 2.25rem; /* M3 titleLarge line height */
+  color: var(--md-sys-color-on-background); /* Or on-surface if this section gets a background */
+  margin-top: 0; /* Remove top margin if image is aligned next to it */
+  margin-bottom: var(--spacing-md);
 }

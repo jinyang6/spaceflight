@@ -7,19 +7,15 @@
   <meta name="description" content="Explore this provider's innovative fleet of reusable rockets."> <!-- Description will be updated dynamically -->
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- charts.js not needed on provider page -->
-  <!-- MWC components are now imported via js/material-components.js in the main script block -->
-  <script type="module" crossorigin src="/spaceflight/assets/provider-BQboO8Jd.js"></script>
-  <link rel="modulepreload" crossorigin href="/spaceflight/assets/outlined-button-BjpjO3pO.js">
+  <!-- Site JS Modules are imported in the script block at the end of body -->
+  <script type="module" crossorigin src="/spaceflight/assets/provider-kPf1iXYz.js"></script>
+  <link rel="modulepreload" crossorigin href="/spaceflight/assets/outlined-button-RoEKl5Q2.js">
   <link rel="stylesheet" crossorigin href="/spaceflight/assets/outlined-button-BKQJmj1F.css">
 </head>
 <body>
   <header>
     <div class="container header-inner">
       <div class="logo"><a href="index.html">Reusable Rockets</a></div>
-      <!-- <nav class="nav" id="main-nav"> -->
-        <!-- Navigation is handled by the logo and breadcrumbs -->
-      <!-- </nav> -->
     </div>
   </header>
 
@@ -30,7 +26,7 @@
   </nav>
 
   <main>
-    <section class="hero-section hero-section--compact"> <!-- Added modifier class -->
+    <section class="hero-section hero-section--compact">
       <div class="container">
         <h1 class="hero-title" id="provider-name">Provider Name</h1>
         <p class="hero-subtitle" id="provider-description">Provider description goes here.</p>
@@ -41,9 +37,7 @@
       <div class="container">
         <h2 id="fleet-title">Reusable Fleet</h2>
         <p id="fleet-description">This provider has developed multiple reusable launch vehicles...</p>
-
         <div class="rocket-grid" id="rocket-grid">
-          <!-- Rocket cards will be added dynamically -->
           <div class="rocket-card placeholder">Loading rockets...</div>
         </div>
       </div>

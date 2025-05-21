@@ -189,7 +189,7 @@
         `;
 
         // --- Initialize Charts ---
-        initCharts(); // Call after mainContent.innerHTML is set
+        await initCharts(); // Call after mainContent.innerHTML is set, now awaited
 
         // --- Logic for Guided Model Loading ---
         const modelLoader = document.getElementById('model-loader');

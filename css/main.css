@@ -638,6 +638,8 @@ ul li::marker {
   border-radius: var(--md-sys-shape-corner-lg);
   margin-top: var(--spacing-lg);
   border: 1px solid var(--md-sys-color-outline-variant);
+  height: 350px; /* Give the container a specific height */
+  position: relative; /* Needed for Chart.js responsiveness when maintainAspectRatio is false */
 }
 /* --- Rocket Detail Page Layout & Image --- */
 .rocket-detail-layout {

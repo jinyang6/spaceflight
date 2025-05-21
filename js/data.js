@@ -10,12 +10,18 @@ let allProvidersDataCache = null; // Simple cache for all provider data
  */
 async function fetchProviderData(providerId) {
   try {
-    // Paths are relative to the root of the 'public' directory, which becomes the server root.
-    // Vite's dev server serves 'public' from root.
-    // On deployment, with base: '/spaceflight/', this will correctly fetch from /spaceflight/data/...
-    const response = await fetch(`/data/${providerId}/${providerId}.json`);
+    // Construct path using BASE_URL to ensure it works in dev and deployment
+    // BASE_URL will be '/' in dev and '/spaceflight/' in production build.
+    // We need to ensure no double slashes if BASE_URL is '/' and path starts with '/'.
+    // A clean way is to ensure the data path part doesn't start with a slash.
+    const baseUrl = import.meta.env.BASE_URL;
+    const dataPath = `data/${providerId}/${providerId}.json`;
+    // Ensure clean joining of baseUrl and dataPath
+    const fetchUrl = `${baseUrl.endsWith('/') ? baseUrl : baseUrl + '/'}${dataPath.startsWith('/') ? dataPath.substring(1) : dataPath}`;
+    
+    const response = await fetch(fetchUrl);
     if (!response.ok) {
-      console.error(`Failed to load data for ${providerId}: ${response.status} ${response.statusText}`);
+      console.error(`Failed to load data for ${providerId} from ${fetchUrl}: ${response.status} ${response.statusText}`);
       return null;
     }
     return await response.json();

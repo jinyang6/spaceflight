@@ -8,16 +8,17 @@ import { getRocketById, formatCurrency } from './main.js';
 
 /**
  * Initialize all charts on the page. Exported for use.
+ * This function is now async as it awaits chart initializations.
  */
-export function initCharts() {
+export async function initCharts() { // Made async
   // Find chart containers
   const costPerLaunchChart = document.getElementById('costPerLaunchChart');
 
   if (costPerLaunchChart) {
-    // Add a small delay to ensure DOM is fully rendered
-    setTimeout(() => {
-      initCostPerLaunchChart(costPerLaunchChart);
-    }, 100);
+    // No longer need setTimeout if data fetching is awaited correctly
+    // The DOMContentLoaded in rocket.html already ensures canvas exists before calling initCharts.
+    // And initCharts will now await the data fetching within initCostPerLaunchChart.
+    await initCostPerLaunchChart(costPerLaunchChart); // Await the async chart init
   }
   // Add logic here to find and initialize other chart types if needed
   // e.g., const costPerKgCanvas = document.getElementById('costPerKgChart');
@@ -27,8 +28,9 @@ export function initCharts() {
 /**
  * Initialize the Cost Per Launch chart showing cost reduction over multiple launches
  * (Internal function, not exported)
+ * This function is now async as it awaits getRocketById.
  */
-function initCostPerLaunchChart(canvas) {
+async function initCostPerLaunchChart(canvas) { // Made async
   // Get rocket ID and provider from data attributes
   const rocketId = canvas.getAttribute('data-rocket-id');
   const provider = canvas.getAttribute('data-provider');
@@ -39,10 +41,12 @@ function initCostPerLaunchChart(canvas) {
   }
 
   try {
-    // Get rocket data using the imported function
-    const rocket = getRocketById(provider, rocketId);
+    // Get rocket data using the imported function - now awaiting it
+    const rocket = await getRocketById(provider, rocketId); // Added await
     if (!rocket || !rocket.costScaling) {
-      console.error('Invalid rocket data or missing cost scaling information');
+      // If rocket is null after await, getRocketById would have logged its own error.
+      // This console.error might be redundant or can be more specific.
+      console.error(`Invalid rocket data or missing cost scaling for ${rocketId} from ${provider} in initCostPerLaunchChart.`);
       return;
     }
 
@@ -72,8 +76,8 @@ function initCostPerLaunchChart(canvas) {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true, // Changed to true
-          aspectRatio: 2.5,         // Added: makes chart wider (width/height)
+          maintainAspectRatio: false, // Set to false to control size with CSS
+          // aspectRatio: 2.5,      // Ignored when maintainAspectRatio is false
           plugins: {
             legend: {
               display: false

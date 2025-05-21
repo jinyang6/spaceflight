@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rocket Details - Reusable Rockets</title> <!-- Title will be updated dynamically -->
+  <meta name="description" content="Explore this reusable rocket and how its reusability dramatically reduces launch costs."> <!-- Description will be updated dynamically -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Model Viewer Component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <!-- Site JS Modules are imported in the script block at the end of body -->
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo"><a href="index.html">Reusable Rockets</a></div>
+    </div>
+  </header>
+
+  <nav aria-label="breadcrumb" class="breadcrumbs-container container">
+    <ol class="breadcrumbs" id="breadcrumbs-list">
+      <!-- Breadcrumbs will be populated here -->
+    </ol>
+  </nav>
+
+  <main id="main-content">
+    <!-- Rocket details will be loaded here -->
+    <div class="container"><p>Loading rocket details...</p></div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Reusable Rockets | Data sourced from publicly available information</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import './js/material-components.js'; // Import all MWC components
+    // import { providers } from './js/data.js'; // No longer importing directly
+    import { formatCurrency, getRocketById, getProviderById } from './js/main.js'; // getRocketById and getProviderById are async
+    import { initCharts } from './js/charts.js';
+
+    document.addEventListener('DOMContentLoaded', async () => { // Make callback async
+      const urlParams = new URLSearchParams(window.location.search);
+      const providerId = urlParams.get('provider');
+      const rocketId = urlParams.get('rocket');
+      const mainContent = document.getElementById('main-content');
+
+      // --- Data Validation ---
+      if (!providerId || !rocketId) {
+        mainContent.innerHTML = '<div class="container"><p>Error: Invalid provider or rocket specified in URL.</p></div>';
+        return;
+      }
+
+      try {
+        // Fetch provider data first to get manufacturer name for breadcrumbs/title
+        const providerData = await getProviderById(providerId);
+        if (!providerData) {
+          mainContent.innerHTML = '<div class="container"><p>Error: Provider data not found.</p></div>';
+          return;
+        }
+
+        const rocket = await getRocketById(providerId, rocketId); // Await the async function
+        if (!rocket) {
+          mainContent.innerHTML = '<div class="container"><p>Error: Rocket not found for this provider.</p></div>';
+          return;
+        }
+
+        // --- Update Page Metadata ---
+        document.title = `${rocket.name} - ${providerData.manufacturer} Reusable Rocket`;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+          metaDesc.setAttribute('content', `Explore the ${rocket.name} from ${providerData.manufacturer} and how its reusability dramatically reduces launch costs.`);
+        }
+
+        // --- Populate Breadcrumbs for Rocket Page ---
+        const breadcrumbsList = document.getElementById('breadcrumbs-list');
+        if (breadcrumbsList) {
+          breadcrumbsList.innerHTML = `
+            <li><a href="index.html">Home</a></li>
+            <li><a href="provider.html?provider=${providerId}">${providerData.manufacturer}</a></li>
+            <li aria-current="page">${rocket.name}</li>
+          `;
+        }
+
+        // --- Helper Functions ---
+        const createStatCard = (value, label) => {
+            const valStr = value !== null && value !== undefined ? String(value) : 'N/A';
+            let displayValue = valStr;
+            if (label === 'Height' && valStr !== 'N/A') displayValue = `${valStr}m`;
+            if (label === 'Diameter' && valStr !== 'N/A') displayValue = `${valStr}m`;
+            if (label === 'Mass' && valStr !== 'N/A') displayValue = `${value} t`;
+            if (label === 'Payload to LEO' && valStr !== 'N/A') displayValue = value > 0 ? `${value} t` : 'Suborbital';
+            if (label === 'Cost per kg to LEO' && valStr !== 'N/A') displayValue = value > 0 ? formatCurrency(value) : 'N/A';
+            if (label === 'First Flight' && valStr !== 'N/A' && value) displayValue = new Date(value).getFullYear(); else if (label === 'First Flight') displayValue = 'N/A';
+            return `
+                <div class="stat-card">
+                    <div class="stat-value">${displayValue}</div>
+                    <div class="stat-label">${label}</div>
+                </div>
+            `;
+        };
+
+        // --- Generate Main Content HTML ---
+        const imagePath = `data/${providerId}/imgs/${rocket.image}`;
+        mainContent.innerHTML = `
+          <section class="hero-section hero-section--compact">
+            <div class="container">
+              <h1 class="hero-title">${rocket.name}</h1>
+              <p class="hero-subtitle">${providerData.manufacturer}'s ${rocket.operationalStatus} ${rocket.reusableStages === 2 ? 'fully' : (rocket.reusableStages === 1 ? 'partially' : '')} reusable launch vehicle</p>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="container">
+              <div class="rocket-detail-layout">
+                <img src="${imagePath}" alt="${rocket.name} rocket" class="rocket-detail-image" loading="lazy" decoding="async" onerror="this.style.display='none';">
+                <div class="rocket-detail-specs">
+                  <h2>Technical Specifications</h2>
+                  <div class="stat-grid">
+                    ${createStatCard(rocket.height_m, 'Height')}
+                    ${createStatCard(rocket.diameter_m, 'Diameter')}
+                    ${createStatCard(rocket.mass_t, 'Mass')}
+                    ${createStatCard(rocket.payloadToLEO_t, 'Payload to LEO')}
+                    ${createStatCard(rocket.firstFlight, 'First Flight')}
+                    ${createStatCard(rocket.reusableStages, 'Reusable Stages')}
+                    ${createStatCard(rocket.costPerKgToLEO_usd, 'Cost per kg to LEO')}
+                    ${createStatCard(rocket.operationalStatus, 'Status')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section model-section-placeholder">
+            <div class="container">
+              <div class="model-loader" id="model-loader">
+                <!-- JS will populate this -->
+              </div>
+              <div class="model-instructions-overlay" id="model-instructions-overlay" style="display: none;">
+                <div class="modal-content">
+                  <h3>How to Interact</h3>
+                  <div class="instructions-grid">
+                    <div class="instruction-item"><img src="assets/icons/rotate.svg" alt="Rotate Icon"><span>Rotate: Click & Drag</span></div>
+                    <div class="instruction-item"><img src="assets/icons/zoom.svg" alt="Zoom Icon"><span>Zoom: Scroll / Pinch</span></div>
+                    <div class="instruction-item"><img src="assets/icons/pan.svg" alt="Pan Icon"><img src="assets/icons/right-click.svg" alt="Right Click Icon" class="inline-icon"><span>Pan: Right-Click / 2-Finger Drag</span></div>
+                  </div>
+                  <md-filled-button id="instructions-ok-btn">Okay, Got It!</md-filled-button>
+                </div>
+              </div>
+              <div class="model-viewer-container" id="model-viewer-container" style="display: none;"></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="container">
+              <h2>Cost Efficiency Through Reusability</h2>
+              <p>The ${rocket.name} demonstrates significant cost savings through its reusable design. The chart below illustrates the estimated cost per launch decreasing over multiple flights.</p>
+              <div class="chart-container">
+                <canvas id="costPerLaunchChart" data-rocket-id="${rocket.id}" data-provider="${providerId}"></canvas>
+              </div>
+              <div class="stat-grid" style="margin-top: 2rem;">
+                ${rocket.costScaling?.map(item => createStatCard(item.cost_usd ? formatCurrency(item.cost_usd) : 'N/A', `Launch ${item.launchNumber} Cost`)).join('') || '<p>Cost scaling data not available.</p>'}
+              </div>
+              <div style="margin-top: 2rem;">
+                <h3>The Economics of ${rocket.name} Reusability</h3>
+                <p>With each reuse, ${providerData.manufacturer} achieves significant cost savings:</p>
+                <ul>
+                  <li>First launch cost: ${rocket.costScaling?.[0]?.cost_usd ? formatCurrency(rocket.costScaling[0].cost_usd) : 'N/A'}</li>
+                  <li>Estimated 20th launch cost: ${rocket.costScaling?.[rocket.costScaling.length - 1]?.cost_usd ? formatCurrency(rocket.costScaling[rocket.costScaling.length - 1].cost_usd) : 'N/A'}</li>
+                  <li>Approximate cost reduction by 20th launch: ${ (rocket.costScaling?.[0]?.cost_usd && rocket.costScaling?.[rocket.costScaling.length - 1]?.cost_usd) ? Math.round((1 - rocket.costScaling[rocket.costScaling.length - 1].cost_usd / rocket.costScaling[0].cost_usd) * 100) + '%' : 'N/A'}</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="container">
+              <h2>Reusability Features</h2>
+              <p>The ${rocket.name} incorporates several key features that enable its reusability:</p>
+              <ul id="reusability-features">
+                <li>${rocket.reusableStages === 1 ? 'Reusable first stage' : (rocket.reusableStages === 2 ? 'Fully reusable first and second stages' : 'Reusability details not specified')}</li>
+                <!-- Add more specific features if available in data -->
+              </ul>
+            </div>
+          </section>
+        `;
+
+        // --- Initialize Charts ---
+        initCharts(); // Call after mainContent.innerHTML is set
+
+        // --- Logic for Guided Model Loading ---
+        const modelLoader = document.getElementById('model-loader');
+        const instructionsOverlay = document.getElementById('model-instructions-overlay');
+        const viewerContainer = document.getElementById('model-viewer-container');
+        const instructionsOkBtn = document.getElementById('instructions-ok-btn');
+
+        if (rocket.modelFile) {
+          const modelPath = `data/${providerId}/models/${rocket.modelFile}`;
+          const modelAlt = `${rocket.name} 3D Model`;
+          const creditText = rocket.modelCredit ? `<p class="model-credit">${rocket.modelCredit}</p>` : '';
+
+          modelLoader.innerHTML = `
+            <div class="model-loader-visual">
+              <img src="assets/icons/cube.svg" alt="3D Cube Icon" class="model-loader-icon">
+              <h4 class="model-loader-title">Interactive 3D Model</h4>
+              <md-filled-button id="load-model-btn" data-model-src="${modelPath}" data-model-alt="${modelAlt}">
+                Load ${rocket.name} 3D Model
+              </md-filled-button>
+            </div>
+          `;
+
+          const loadModelBtn = document.getElementById('load-model-btn');
+          if (loadModelBtn) { // Check if button exists before adding listener
+            loadModelBtn.addEventListener('click', () => {
+              modelLoader.style.display = 'none';
+              instructionsOverlay.style.display = 'flex';
+            });
+          }
+          if (instructionsOkBtn) { // Check if button exists
+            instructionsOkBtn.addEventListener('click', () => {
+              instructionsOverlay.style.display = 'none';
+              viewerContainer.innerHTML = `
+                <model-viewer
+                  src="${modelPath}"
+                  alt="${modelAlt}"
+                  camera-controls
+                  auto-rotate
+                  loading="lazy"
+                  decoding="async"
+                  shadow-intensity="1"
+                  environment-image="neutral"
+                  style="width: 100%; height: 500px; background-color: var(--md-sys-color-surface-container-lowest); border-radius: var(--md-sys-shape-corner-lg);"
+                ></model-viewer>
+                ${creditText}
+              `;
+              viewerContainer.style.display = 'block';
+            });
+          }
+        } else {
+          modelLoader.innerHTML = `<p class="model-not-available">3D Model Not Available for ${rocket.name}</p>`;
+        }
+        // --- End Logic for Guided Model Loading ---
+
+      } catch (error) {
+        console.error("Failed to load rocket details:", error);
+        mainContent.innerHTML = '<div class="container"><p>Could not load rocket details. Please try refreshing the page.</p></div>';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Details - Reusable Rockets</title> <!-- Title will be updated dynamically -->
+  <meta name="description" content="Explore this provider's innovative fleet of reusable rockets."> <!-- Description will be updated dynamically -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Site JS Modules are imported in the script block at the end of body -->
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo"><a href="index.html">Reusable Rockets</a></div>
+    </div>
+  </header>
+
+  <nav aria-label="breadcrumb" class="breadcrumbs-container container">
+    <ol class="breadcrumbs" id="breadcrumbs-list">
+      <!-- Breadcrumbs will be populated here -->
+    </ol>
+  </nav>
+
+  <main>
+    <section class="hero-section hero-section--compact">
+      <div class="container">
+        <h1 class="hero-title" id="provider-name">Provider Name</h1>
+        <p class="hero-subtitle" id="provider-description">Provider description goes here.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 id="fleet-title">Reusable Fleet</h2>
+        <p id="fleet-description">This provider has developed multiple reusable launch vehicles...</p>
+        <div class="rocket-grid" id="rocket-grid">
+          <div class="rocket-card placeholder">Loading rockets...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 id="approach-title">Reusability Approach</h2>
+        <p id="approach-description">Details about the provider's reusability approach...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Reusable Rockets | Data sourced from publicly available information</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import './js/material-components.js'; // Import all MWC components
+    // Note: data.js is no longer imported directly here. main.js handles data fetching.
+    import { formatCurrency, formatCompactNumber, getProviderById } from './js/main.js'; // getProviderById is now async
+
+    document.addEventListener('DOMContentLoaded', async () => { // Make callback async
+      const urlParams = new URLSearchParams(window.location.search);
+      const providerId = urlParams.get('provider');
+      const mainElement = document.querySelector('main'); // Use mainElement for error messages
+
+      if (!providerId) {
+        if (mainElement) mainElement.innerHTML = '<div class="container"><p>Error: No provider ID specified.</p></div>';
+        console.error("No provider ID specified in URL.");
+        return;
+      }
+
+      try {
+        const providerData = await getProviderById(providerId); // Await the async function
+
+        if (!providerData) {
+          if (mainElement) mainElement.innerHTML = '<div class="container"><p>Error: Provider not found.</p></div>';
+          console.error(`Provider data not found for ID: ${providerId}`);
+          return;
+        }
+
+        // Update page title and meta description
+        document.title = `${providerData.manufacturer} - Reusable Rockets`;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+          metaDesc.setAttribute('content', `Explore ${providerData.manufacturer}'s innovative fleet of reusable rockets and how they're reducing the cost of space access.`);
+        }
+
+        // Populate hero section
+        document.getElementById('provider-name').textContent = providerData.manufacturer;
+        document.getElementById('provider-description').textContent = `${providerData.country}-based aerospace manufacturer developing reusable rocket technology.`;
+
+        // Populate Breadcrumbs
+        const breadcrumbsList = document.getElementById('breadcrumbs-list');
+        if (breadcrumbsList) {
+          breadcrumbsList.innerHTML = `
+            <li><a href="index.html">Home</a></li>
+            <li aria-current="page">${providerData.manufacturer}</li>
+          `;
+        }
+
+        // Populate fleet section
+        document.getElementById('fleet-title').textContent = `${providerData.manufacturer} Reusable Fleet`;
+        document.getElementById('fleet-description').textContent = `${providerData.manufacturer} has developed the following reusable launch vehicles:`;
+
+        const rocketGrid = document.getElementById('rocket-grid');
+        rocketGrid.innerHTML = ''; // Clear placeholder
+
+        if (providerData.vehicles && providerData.vehicles.length > 0) {
+          providerData.vehicles.forEach(rocket => {
+            const card = document.createElement('div');
+            card.classList.add('rocket-card');
+
+            // Paths are relative to public root. Vite handles base path.
+            const imagePath = `data/${providerId}/imgs/${rocket.image}`; 
+            const firstLaunchCost = rocket.costScaling?.find(c => c.launchNumber === 1)?.cost_usd;
+            const twentiethLaunchCost = rocket.costScaling?.find(c => c.launchNumber === 20)?.cost_usd;
+
+            card.innerHTML = `
+              <img src="${imagePath}" alt="${rocket.name} rocket" class="rocket-image" loading="lazy" decoding="async" onerror="this.style.display='none'">
+              <div class="rocket-content">
+                <h3 class="rocket-title">${rocket.name}</h3>
+                <p class="rocket-description">${rocket.payloadToLEO_t !== null && rocket.payloadToLEO_t > 0 ? `Delivers ${rocket.payloadToLEO_t} t to LEO.` : (rocket.payloadToLEO_t === 0 ? 'Suborbital / Test Vehicle' : 'Payload N/A')}</p>
+                <div class="stat-grid">
+                  <div class="stat-card">
+                    <div class="stat-value">${rocket.reusableStages !== undefined ? rocket.reusableStages : 'N/A'}</div>
+                    <div class="stat-label">Reusable Stages</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-value">${firstLaunchCost ? formatCurrency(firstLaunchCost) : 'N/A'}</div>
+                    <div class="stat-label">First Launch Cost</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-value">${twentiethLaunchCost ? formatCurrency(twentiethLaunchCost) : 'N/A'}</div>
+                    <div class="stat-label">Est. 20th Launch Cost</div>
+                  </div>
+                </div>
+                <div class="rocket-actions" style="text-align: right; margin-top: auto; padding-top: var(--spacing-sm);">
+                  <md-outlined-button href="rocket.html?provider=${providerId}&rocket=${rocket.id}">Explore Rocket <span aria-hidden="true">&rarr;</span></md-outlined-button>
+                </div>
+              </div>
+            `;
+            rocketGrid.appendChild(card);
+          });
+        } else {
+          rocketGrid.innerHTML = '<p>No vehicle data available for this provider.</p>';
+        }
+
+        // Populate approach section
+        document.getElementById('approach-title').textContent = `${providerData.manufacturer} Reusability Approach`;
+        document.getElementById('approach-description').textContent = providerData.reusabilityApproach || `Details about ${providerData.manufacturer}'s specific approach to rocket reusability and cost reduction strategies.`; // Use data if available
+
+      } catch (error) {
+        console.error("Failed to load provider details:", error);
+        if (mainElement) mainElement.innerHTML = '<div class="container"><p>Could not load provider details. Please try refreshing the page.</p></div>';
+      }
+    });
+  </script>
+</body>
+</html>

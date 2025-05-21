@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reusable Rockets - Revolutionizing Space Access</title>
+  <meta name="description" content="Explore how reusable rockets are dramatically reducing the cost of space access through innovative technology and engineering.">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/data.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+  <!-- charts.js not needed on index page -->
+  <!-- MWC components are now imported via js/material-components.js in the main script block -->
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo"><a href="index.html">Reusable Rockets</a></div>
+      <!-- <nav class="nav" id="main-nav"> -->
+        <!-- Navigation is handled by the logo and breadcrumbs -->
+      <!-- </nav> -->
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section"> <!-- Changed class, removed inline styles -->
+      <div class="container">
+        <h1 class="hero-title">Reusable Rocket Directory</h1> <!-- Removed inline styles -->
+        <p class="hero-subtitle">An overview of companies advancing reusable spaceflight technology.</p> <!-- Removed inline styles -->
+      </div>
+    </section>
+
+    <section class="section" id="providers-section">
+      <div class="container">
+        <h2 class="section-title">Launch Providers</h2> <!-- Added class, removed inline style -->
+        <p>Several companies are leading the charge in reusable rocket technology, each with their own approach to reducing launch costs while maximizing payload capacity.</p>
+
+        <div class="provider-grid" id="provider-grid">
+          <!-- Provider cards will be added dynamically -->
+          <div class="provider-card placeholder">Loading providers...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keeping other sections for now, will restyle their stat cards next -->
+    <section class="section">
+      <div class="container">
+        <h2>The Economics of Reusability</h2>
+        <p>Traditional rockets are discarded after a single use, making space access prohibitively expensive. Reusable rockets introduce a paradigm shift by allowing multiple launches with the same vehicle, dramatically reducing costs with each reuse.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-value">Up to 90%+</div>
+            <div class="stat-label">Cost reduction potential through reusability</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">$100M+</div>
+            <div class="stat-label">Typical single-use launch cost</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">Under $10M</div>
+            <div class="stat-label">Potential cost after multiple reuses</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="container">
+        <h2>The Impact of Reusability</h2>
+        <p>With each successive launch, reusable rockets dramatically reduce the cost of accessing space, opening up new possibilities for satellite deployment, space exploration, and even human settlement beyond Earth.</p>
+        <p>Explore each provider's fleet to see how their innovative approaches to reusability are reshaping the economics of spaceflight.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Reusable Rockets | Data sourced from publicly available information</p>
+    </div>
+  </footer>
+
+  <script type="module"> // Add type="module"
+    import './js/material-components.js'; // Import all MWC components
+    // import { providers } from './js/data.js'; // No longer importing providers directly
+    import { getAllProvidersSummary } from './js/main.js'; // This is now an async function
+
+    document.addEventListener('DOMContentLoaded', async () => { // Make callback async
+      // Update header navigation - logic removed as it's handled by static header/breadcrumbs
+
+      const providerGrid = document.getElementById('provider-grid');
+      if (!providerGrid) {
+        console.error("Provider grid not found on index.html!");
+        return;
+      }
+      providerGrid.innerHTML = ''; // Clear any placeholders
+
+      try {
+        const providersSummary = await getAllProvidersSummary(); // Await the async function
+
+        if (!providersSummary || providersSummary.length === 0) {
+          providerGrid.innerHTML = '<p>No provider data available at the moment. Please check back later.</p>';
+          return;
+        }
+
+        providersSummary.forEach(provider => {
+          const card = document.createElement('div');
+          card.classList.add('provider-card');
+
+          const description = `${provider.country}-based aerospace company developing reusable rocket technology. Fleet includes ${provider.vehicleCount} vehicle(s).`;
+          // imagePath is already correctly formed by getAllProvidersSummary (e.g., 'assets/placeholder.png' or 'data/spacex/imgs/falcon9.png')
+          // These paths are relative to the public root.
+          const imagePath = provider.image;
+          
+          card.innerHTML = `
+            <img src="${imagePath}" alt="${provider.manufacturer} logo or rocket" class="provider-image" loading="lazy" decoding="async" onerror="this.style.display='none';">
+            <div class="provider-content">
+              <h3 class="provider-title">${provider.manufacturer}</h3>
+              <p class="provider-description">${description}</p>
+              <div class="provider-actions">
+                <md-filled-button href="provider.html?provider=${provider.id}">Explore Fleet</md-filled-button>
+              </div>
+            </div>
+          `;
+          providerGrid.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Failed to load provider summaries for index page:", error);
+        providerGrid.innerHTML = '<p>Could not load provider data. Please try refreshing the page.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
